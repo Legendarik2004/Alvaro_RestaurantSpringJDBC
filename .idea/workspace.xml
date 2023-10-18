@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b697d157-42fb-4d67-8cd8-9ccfc7a31c3f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2VHzUiwGdMT5A70RyfpecoVfFUd" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/alvar/OneDrive/Documentos/2DAM/Acceso a datos/Multipantallas_AlvaroRdb",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.updates",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="model.errors" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\alvar\OneDrive\Documentos\2DAM\Acceso a datos\Multipantallas_AlvaroR\src\main\java\model" />
+      <recent name="C:\Users\alvar\OneDrive\Documentos\2DAM\Acceso a datos\Multipantallas_AlvaroR" />
+      <recent name="C:\Users\alvar\OneDrive\Documentos\2DAM\Acceso a datos\Multipantallas_AlvaroR\src" />
+      <recent name="C:\Users\david\IdeaProjects\SQLrestaurant_DavidRoldan\src\main\resources" />
+      <recent name="C:\Users\david\IdeaProjects\primer_proyecto_fx\src\main\resources" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\david\IdeaProjects\SQLrestaurant_DavidRoldan\src\main\resources\fxml\orders" />
+      <recent name="C:\Users\david\IdeaProjects\SQLrestaurant_DavidRoldan\src\main\resources\fxml\customers" />
+    </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="common.Constants" />
+      <recent name="common.Constantes" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="services" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="services" />
+      <recent name="common" />
+      <recent name="dao" />
+      <recent name="dao.impl" />
+      <recent name="" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="DIJavafx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ui.main.DIJavafx" />
+      <module name="SQLrestaurant_DavidRoldan" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ui.main.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.DIJavafx" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b697d157-42fb-4d67-8cd8-9ccfc7a31c3f" name="Changes" comment="" />
+      <created>1694507812506</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1694507812506</updated>
+      <workItem from="1694507813612" duration="2029000" />
+      <workItem from="1694602716671" duration="2002000" />
+      <workItem from="1694761218611" duration="1196000" />
+      <workItem from="1695157557125" duration="1487000" />
+      <workItem from="1695193489725" duration="633000" />
+      <workItem from="1695195363704" duration="598000" />
+      <workItem from="1695196258306" duration="46309000" />
+      <workItem from="1695319449769" duration="541000" />
+      <workItem from="1695364403041" duration="337000" />
+      <workItem from="1695365473823" duration="287000" />
+      <workItem from="1695365866086" duration="320000" />
+      <workItem from="1695367203487" duration="25293000" />
+      <workItem from="1695653059348" duration="226000" />
+      <workItem from="1695658123771" duration="502000" />
+      <workItem from="1695796849301" duration="2278000" />
+      <workItem from="1695799262608" duration="52000" />
+      <workItem from="1695801765872" duration="564000" />
+      <workItem from="1695811057307" duration="4373000" />
+      <workItem from="1695883409668" duration="1984000" />
+      <workItem from="1695970051603" duration="17013000" />
+      <workItem from="1696162806126" duration="12857000" />
+      <workItem from="1697446426634" duration="31000" />
+      <workItem from="1697446462592" duration="10652000" />
+      <workItem from="1697465162736" duration="1645000" />
+      <workItem from="1697488943428" duration="4528000" />
+      <workItem from="1697526146277" duration="17289000" />
+      <workItem from="1697552120968" duration="3700000" />
+      <workItem from="1697612206545" duration="2348000" />
+      <workItem from="1697615521860" duration="242000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.RuntimeException" package="java.lang" />
+          <option name="timeStamp" value="5" />
+        </breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ui/screens/customers/UpdateCustomerController.java</url>
+          <line>83</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

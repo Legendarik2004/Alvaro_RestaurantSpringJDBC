@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="500" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.2-ea"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.screens.customers.ShowCustomersController">
+    <TableView fx:id="customersTable" layoutX="20.0" layoutY="58.0" prefHeight="331.0" prefWidth="543.0">
+        <columns>
+            <TableColumn fx:id="idCustomerColumn" prefWidth="87.0" text="Id"/>
+            <TableColumn fx:id="firstnameCustomerColumn" prefWidth="81.0" text="First name"/>
+            <TableColumn fx:id="lastnameCustomerColumn" prefWidth="87.0" text="Last name"/>
+            <TableColumn fx:id="emailCustomerColumn" prefWidth="95.0" text="Email"/>
+            <TableColumn fx:id="phoneCustomerColumn" prefWidth="95.0" text="Phone"/>
+            <TableColumn fx:id="dobCustomerColumn" prefWidth="95.0" text="Date of birth"/>
+        </columns>
+    </TableView>
+    <Label layoutX="394.0" layoutY="14.0" text="Customers">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Label>
+
+</AnchorPane>

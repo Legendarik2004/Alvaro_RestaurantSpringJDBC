@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Customer;
-import model.Order;
 import services.CustomerService;
 import ui.screens.common.BaseScreenController;
 

@@ -4,24 +4,38 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b697d157-42fb-4d67-8cd8-9ccfc7a31c3f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+    <list default="true" id="fce01c5d-2056-4abd-aa06-0db4cdc1643c" name="Changes" comment="Add y show funcionan">
+      <change afterPath="$PROJECT_DIR$/src/main/java/dao/impl/DBConnection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/mysql-properties.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/orders.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/common/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/common/Configuration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/common/ConfigurationXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/OrderDAOXml.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/CustomerDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/CustomerDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImplCsv.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImplCsv.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImplXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/xml/OrderItemXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/xml/OrderXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/xml/OrdersXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/OrderServiceXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/customers/AddCustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/customers/AddCustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/customers/ShowCustomersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/customers/ShowCustomersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/AddOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/AddOrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/DeleteOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/DeleteOrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/ShowOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/ShowOrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/UpdateOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/UpdateOrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties.xml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="FxmlFile" />
-        <option value="Interface" />
-        <option value="Class" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -38,60 +52,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/alvar/OneDrive/Documentos/2DAM/Acceso a datos/Multipantallas_AlvaroRdb",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.updates",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/alvar/OneDrive/Documentos/2DAM/Acceso a datos/Multipantallas_AlvaroRdb/src/main/resources&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
-  <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="model.errors" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\alvar\OneDrive\Documentos\2DAM\Acceso a datos\Multipantallas_AlvaroR\src\main\java\model" />
-      <recent name="C:\Users\alvar\OneDrive\Documentos\2DAM\Acceso a datos\Multipantallas_AlvaroR" />
-      <recent name="C:\Users\alvar\OneDrive\Documentos\2DAM\Acceso a datos\Multipantallas_AlvaroR\src" />
-      <recent name="C:\Users\david\IdeaProjects\SQLrestaurant_DavidRoldan\src\main\resources" />
-      <recent name="C:\Users\david\IdeaProjects\primer_proyecto_fx\src\main\resources" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\david\IdeaProjects\SQLrestaurant_DavidRoldan\src\main\resources\fxml\orders" />
-      <recent name="C:\Users\david\IdeaProjects\SQLrestaurant_DavidRoldan\src\main\resources\fxml\customers" />
-    </key>
-    <key name="MoveMembersDialog.RECENTS_KEY">
-      <recent name="common.Constants" />
-      <recent name="common.Constantes" />
-    </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="services" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="services" />
-      <recent name="common" />
-      <recent name="dao" />
-      <recent name="dao.impl" />
-      <recent name="" />
-    </key>
-  </component>
+}</component>
   <component name="RunManager">
     <configuration name="DIJavafx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ui.main.DIJavafx" />
@@ -106,11 +90,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.DIJavafx" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -149,11 +128,23 @@
       <workItem from="1697552120968" duration="3700000" />
       <workItem from="1697612206545" duration="2348000" />
       <workItem from="1697615521860" duration="242000" />
+      <workItem from="1697615779280" duration="12345000" />
+      <workItem from="1697629493691" duration="2290000" />
+      <workItem from="1697666219058" duration="667000" />
+      <workItem from="1697702492615" duration="4892000" />
+      <workItem from="1697785762630" duration="917000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="Add y show funcionan" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add y show funcionan" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

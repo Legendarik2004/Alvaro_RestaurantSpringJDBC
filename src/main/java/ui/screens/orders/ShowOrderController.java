@@ -1,24 +1,20 @@
 package ui.screens.orders;
 
 
-import io.vavr.control.Either;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import model.Customer;
+import model.Item;
 import model.Order;
 
-import model.errors.OrderError;
-import model.xml.OrderItemXML;
 import services.OrderService;
-import services.OrderServiceXML;
 import ui.screens.common.BaseScreenController;
 
 import java.io.IOException;
 import java.security.Timestamp;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ShowOrderController extends BaseScreenController {
@@ -33,12 +29,11 @@ public class ShowOrderController extends BaseScreenController {
     @FXML
     public TableColumn<Integer, Order> tableOrderColumn;
     @FXML
-    public TableColumn<Integer, OrderItemXML> quantityItemColumn;
+    public TableColumn<Integer, Item> quantityItemColumn;
     @FXML
-    public TableColumn<String, OrderItemXML> menuItemColumn;
+    public TableColumn<String, Item> menuItemColumn;
 
     private final OrderService orderService;
-    private final OrderServiceXML orderServiceXml;
     @FXML
     public ComboBox filterComboBox;
     @FXML
@@ -50,12 +45,11 @@ public class ShowOrderController extends BaseScreenController {
     @FXML
     public Label customernameLabel;
     @FXML
-    public TableView<OrderItemXML> itemsTable;
+    public TableView<Item> itemsTable;
 
     @Inject
-    public ShowOrderController(OrderService orderService, OrderServiceXML orderServiceXml) {
+    public ShowOrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.orderServiceXml = orderServiceXml;
     }
 
 
@@ -67,7 +61,7 @@ public class ShowOrderController extends BaseScreenController {
         menuItemColumn.setCellValueFactory(new PropertyValueFactory<>("menuItem"));
         quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-        filterComboBox.getItems().addAll("Date", "Customer");
+        filterComboBox.getItems().addAll("Default", "Date", "Customer");
         customerOrderComboBox.getItems().addAll(orderService.getAll().get().stream().map(Order::getCustomerId).collect(Collectors.toList()));
 
         customerOrderComboBox.setVisible(false);
@@ -88,57 +82,56 @@ public class ShowOrderController extends BaseScreenController {
                 .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
         ordersTable.setOnMouseClicked(event -> {
             Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
-            itemsTable.getItems().clear();
-            itemsTable.getItems().addAll(orderServiceXml.get(selectedOrder.getIdOrder()).get());
+
         });
     }
 
 
     @FXML
     public void filter() {
-        String aux = null;
-        setTables();
-        if (filterComboBox.getValue() == "Date") {
+        String selectedFilter = filterComboBox.getValue().toString();
+
+        if ("Date".equals(selectedFilter)) {
             dateField.setVisible(true);
             customerOrderComboBox.setVisible(false);
             filterButton.setVisible(true);
-            aux = "Date";
-        }
-        if (filterComboBox.getValue() == "Customer") {
-            dateField.setVisible(false);
-            customerOrderComboBox.setVisible(true);
-            filterButton.setVisible(true);
-            aux = "Customer";
-        }
-        String selectedFilter = aux;
-        filterButton.setOnAction(event -> {
-            ordersTable.getItems().clear();
 
-            if ("Date".equals(selectedFilter)) {
+            filterButton.setOnAction(event -> {
+
                 if (dateField.getValue() != null) {
+                    ordersTable.getItems().clear();
                     orderService.getAll()
                             .map(orders -> orders.stream()
-                                    .filter(order -> order.getDate().toLocalDate().equals(dateField.getValue()))
+                                    .filter(order -> order.getDate().toLocalDateTime().toLocalDate().equals(dateField.getValue()))
                                     .collect(Collectors.toList()))
                             .peek(ordersTable.getItems()::addAll)
                             .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
+                    dateField.setValue(null);
                 }
 
-            } else if ("Customer".equals(selectedFilter)) {
+            });
+        } else if ("Customer".equals(selectedFilter)) {
+            dateField.setVisible(false);
+            customerOrderComboBox.setVisible(true);
+            filterButton.setVisible(true);
+
+            filterButton.setOnAction(event -> {
 
                 if (customerOrderComboBox.getValue() != null) {
+                    ordersTable.getItems().clear();
                     orderService.getAll()
                             .map(orders -> orders.stream()
                                     .filter(order -> {
                                         String customerIdAsString = String.valueOf(order.getCustomerId());
-                                        return customerIdAsString.equals(customerOrderComboBox.getValue());
+                                        return customerIdAsString.equals(customerOrderComboBox.getValue().toString());
                                     })
                                     .collect(Collectors.toList()))
                             .peek(ordersTable.getItems()::addAll)
                             .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
                 }
-
-            }
-        });
+            });
+        }else if ("Default".equals(selectedFilter)||selectedFilter == null){
+            setTables();
+        }
     }
 }

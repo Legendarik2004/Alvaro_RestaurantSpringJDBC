@@ -1,63 +1,65 @@
 package dao.impl;
 
-import common.Configuration;
 import common.Constants;
 import io.vavr.control.Either;
+import jakarta.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import model.Order;
 import model.errors.OrderError;
-import model.errors.OrderErrorEmptyList;
-import model.xml.OrderItemXML;
-import model.xml.OrderXML;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Log4j2
 public class OrderDaoImplCsv implements dao.OrderDAO {
+    private final DBConnection db;
+
+    @Inject
+    public OrderDaoImplCsv(DBConnection db) {
+        this.db = db;
+    }
 
     @Override
     public Either<OrderError, List<Order>> getAll() {
+
         Either<OrderError, List<Order>> result;
-        Path file = Paths.get(Configuration.getInstance().getProperty("pathDataOrdersCsv"));
 
-        //Fill with data
-        List<Order> orderList = new ArrayList<>();
+        try (Connection myConnection = db.getConnection();
+             Statement statement = myConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                     ResultSet.CONCUR_READ_ONLY)) {
+            ResultSet rs = statement.executeQuery("select * from orders");
 
-//        orderList.add(new Order(1, LocalDateTime.now(), 1, 1));
-//        orderList.add(new Order(2, LocalDateTime.now(), 2, 2));
-//        orderList.add(new Order(3, LocalDateTime.now(), 3, 3));
-//        orderList.add(new Order(4, LocalDateTime.now(), 4, 4));
-//        orderList.add(new Order(5, LocalDateTime.now(), 5, 5));
-//        orderList.add(new Order(6, LocalDateTime.now(), 6, 6));
 
-        try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                orderList.add(new Order(line));
-            }
 
-            if (orderList.isEmpty()) {
-                result = Either.left(new OrderErrorEmptyList());
-            } else {
-                result = Either.right(orderList);
-            }
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            result = Either.left(new OrderError(Constants.ERROR_ADDING_ORDER));
+            result = Either.right(readRS(rs).get());
+        } catch (SQLException e) {
+            Logger.getLogger(OrderDaoImplCsv.class.getName()).log(Level.SEVERE, null, e);
+            result = Either.left(new OrderError( Constants.ERROR));
         }
         return result;
     }
 
+    private Either<OrderError, List<Order>> readRS(ResultSet rs) {
+        Either<OrderError, List<Order>> either;
+        try {
+            List<Order> orders = new ArrayList<>();
+            while (rs.next()) {
+                Order resultOrder = new Order(
+                        rs.getInt("order_id"),
+                        rs.getTimestamp("order_date"),
+                        rs.getInt("order_id"),
+                        rs.getInt("order_id"));
+                orders.add(resultOrder);
+            }
+            either = Either.right(orders);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            either = Either.left(new OrderError(Constants.ERROR));
+        }
+        return either;
+    }
     @Override
     public Either<OrderError, List<Order>> get(int id) {
 
@@ -66,27 +68,17 @@ public class OrderDaoImplCsv implements dao.OrderDAO {
 
     @Override
     public Either<OrderError, Integer> save(Order order) {
-        Path file = Paths.get(Configuration.getInstance().getProperty("pathDataOrdersCsv"));
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file.toFile(), true))) {
-
-            writer.write(order.toStringTextFile());
-            writer.newLine();
-            return Either.right(0);
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            return Either.left(new OrderError(Constants.ERROR_ADDING_ORDER));
-        }
+        return Either.right(0);
     }
 
 
     @Override
     public Either<OrderError, Integer> update(Order c) {
-        return Either.right(1);
+        return Either.right(0);
     }
 
     @Override
     public Either<OrderError, Integer> delete(Order c) {
-        return Either.right(1);
+        return Either.right(0);
     }
 }

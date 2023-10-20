@@ -56,7 +56,7 @@ public class UpdateOrderController  extends BaseScreenController {
             if (selectedOrder != null) {
                 tableOrderField.setText(String.valueOf(selectedOrder.getTableId()));
                 customerOrderField.setText(String.valueOf(selectedOrder.getCustomerId()));
-                dateField.setValue(LocalDate.from(selectedOrder.getDate()));
+
             }
         }
     }

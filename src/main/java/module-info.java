@@ -15,10 +15,10 @@ module javafx {
 
     requires MaterialFX;
 
-    opens model.xml to jakarta.xml.bind;
 
 
     requires jakarta.xml.bind;
+    requires java.sql;
     exports ui.main to javafx.graphics;
     exports ui.screens.principal;
     exports ui.screens.login;
@@ -29,7 +29,6 @@ module javafx {
     exports dao.impl;
     exports ui.screens.welcome;
     exports model.errors;
-    exports model.xml;
 
     opens ui.screens.login;
     opens ui.screens.principal;
@@ -39,4 +38,5 @@ module javafx {
     opens fxml;
     opens services;
     opens common;
+    opens dao.impl;
 }

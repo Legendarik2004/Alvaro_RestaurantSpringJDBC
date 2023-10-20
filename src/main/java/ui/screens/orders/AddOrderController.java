@@ -6,16 +6,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import model.Customer;
 import model.Item;
 import model.Order;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.stream.Collectors;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 public class AddOrderController extends BaseScreenController {
 
@@ -67,7 +65,7 @@ public class AddOrderController extends BaseScreenController {
         } else {
             int idMayor = orderService.getAll().get().stream().mapToInt(Order::getIdOrder).max().getAsInt();
             idMayor++;
-            orderService.save(new Order(idMayor, LocalDateTime.now(), Integer.parseInt(tableOrderField.getText()), Integer.parseInt(customerOrderFieldCombo.getValue().toString()))).peek(success -> {
+            orderService.save(new Order(idMayor, Timestamp.from(Instant.now()), Integer.parseInt(tableOrderField.getText()), Integer.parseInt(customerOrderFieldCombo.getValue().toString()))).peek(success -> {
                         if (success == 0) {
                             setTable();
                             getPrincipalController().showConfirmationAlert(Constants.ORDER_ADDED_SUCCESSFULLY);

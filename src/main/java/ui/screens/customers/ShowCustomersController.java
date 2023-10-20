@@ -48,7 +48,7 @@ public class ShowCustomersController extends BaseScreenController {
         setTables();
     }
 
-    private void setTables() throws IOException {
+    private void setTables() {
         customersTable.getItems().clear();
         servicesCustomers.getAll().peek(customers -> customersTable.getItems().addAll(customers))
                 .peekLeft(customerError -> getPrincipalController().showErrorAlert(customerError.getMessage()));

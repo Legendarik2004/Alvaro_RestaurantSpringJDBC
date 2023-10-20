@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 @Getter
@@ -12,21 +16,19 @@ import java.util.Properties;
 @Singleton
 public class Configuration {
 
-    private String pathDatosCustomers;
-    private String pathDatosOrdersCsv;
     private static Configuration instance=null;
     private Properties p;
     public Configuration() {
-
+        Path p1 = Paths.get("src/main/resources/mysql-properties.xml");
+        p= new Properties();
+        InputStream propertiesStream;
         try {
-            p = new Properties();
-            p.load(getClass().getClassLoader().getResourceAsStream("config.properties"));
-            this.pathDatosCustomers = p.getProperty("pathDataCustomers");
-            this.pathDatosOrdersCsv = p.getProperty("pathDataOrdersCsv");
+            propertiesStream = Files.newInputStream(p1);
+            p.loadFromXML(propertiesStream);
 
 
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            e.printStackTrace();
         }
     }
 

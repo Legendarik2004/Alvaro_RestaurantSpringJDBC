@@ -2,19 +2,21 @@ package ui.screens.orders;
 
 
 import jakarta.inject.Inject;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import model.Item;
+import javafx.scene.input.MouseEvent;
+import model.Customer;
 import model.Order;
-
+import model.OrderItem;
+import services.CustomerService;
+import services.OrderItemsService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
 
 import java.io.IOException;
 import java.security.Timestamp;
-
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ShowOrderController extends BaseScreenController {
@@ -29,15 +31,16 @@ public class ShowOrderController extends BaseScreenController {
     @FXML
     public TableColumn<Integer, Order> tableOrderColumn;
     @FXML
-    public TableColumn<Integer, Item> quantityItemColumn;
+    public TableColumn<Integer, OrderItem> quantityItemColumn;
     @FXML
-    public TableColumn<String, Item> menuItemColumn;
-
+    public TableColumn<OrderItem, String> nameItemColumn;
     private final OrderService orderService;
+    private final OrderItemsService orderItemsService;
+    private final CustomerService customerService;
     @FXML
-    public ComboBox filterComboBox;
+    public ComboBox<String> filterComboBox;
     @FXML
-    public ComboBox customerOrderComboBox;
+    public ComboBox<Integer> customerOrderComboBox;
     @FXML
     public DatePicker dateField;
     @FXML
@@ -45,47 +48,71 @@ public class ShowOrderController extends BaseScreenController {
     @FXML
     public Label customernameLabel;
     @FXML
-    public TableView<Item> itemsTable;
+    public TableView<OrderItem> itemsTable;
+
+    private Order selectedOrder;
 
     @Inject
-    public ShowOrderController(OrderService orderService) {
+    public ShowOrderController(OrderService orderService, OrderItemsService orderItemsService, CustomerService customerService) {
         this.orderService = orderService;
+        this.orderItemsService = orderItemsService;
+        this.customerService = customerService;
     }
 
 
     public void initialize() throws IOException {
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("idOrder"));
+        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("tableId"));
-        menuItemColumn.setCellValueFactory(new PropertyValueFactory<>("menuItem"));
+        nameItemColumn.setCellValueFactory((cellData -> new SimpleStringProperty(cellData.getValue().getMenuItem().getName())));
         quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        ordersTable.setOnMouseClicked(this::handleTableClick);
 
         filterComboBox.getItems().addAll("Default", "Date", "Customer");
-        customerOrderComboBox.getItems().addAll(orderService.getAll().get().stream().map(Order::getCustomerId).collect(Collectors.toList()));
+        customerOrderComboBox.getItems().addAll(customerService.getAll().get().stream().map(Customer::getId).toList());
 
         customerOrderComboBox.setVisible(false);
         dateField.setVisible(false);
         filterButton.setVisible(false);
+    }
 
+    private void handleTableClick(MouseEvent event) {
+        if (event.getClickCount() == 1) {
+            Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
+            if (selectedOrder != null) {
+                this.selectedOrder = selectedOrder;
+            }
+        }
+        setOrderItemTable();
     }
 
     @Override
     public void principalCargado() throws IOException {
-        setTables();
+        setOrderTable();
     }
 
-    private void setTables() {
-
+    private void setOrderTable() {
         ordersTable.getItems().clear();
         orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
                 .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
-        ordersTable.setOnMouseClicked(event -> {
-            Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
 
-        });
     }
 
+    private void setOrderItemTable() {
+        if (selectedOrder != null) {
+            orderItemsService.getAllOrderItems(selectedOrder.getOrderId())
+                    .peek(orderItems -> {
+                        itemsTable.getItems().setAll(orderItems);
+                    })
+                    .peekLeft(noItems -> itemsTable.getItems().clear());
+            customerService.get(selectedOrder.getCustomerId())
+                    .peek(customer -> customernameLabel.setText(customer.toStringSimplified()))
+                    .peekLeft(noCustomer -> customernameLabel.setText(noCustomer.getMessage()));
+        } else {
+            itemsTable.getItems().clear();
+        }
+    }
 
     @FXML
     public void filter() {
@@ -97,7 +124,7 @@ public class ShowOrderController extends BaseScreenController {
             filterButton.setVisible(true);
 
             filterButton.setOnAction(event -> {
-
+                itemsTable.getItems().clear();
                 if (dateField.getValue() != null) {
                     ordersTable.getItems().clear();
                     orderService.getAll()
@@ -116,8 +143,9 @@ public class ShowOrderController extends BaseScreenController {
             filterButton.setVisible(true);
 
             filterButton.setOnAction(event -> {
-
+                itemsTable.getItems().clear();
                 if (customerOrderComboBox.getValue() != null) {
+
                     ordersTable.getItems().clear();
                     orderService.getAll()
                             .map(orders -> orders.stream()
@@ -130,8 +158,11 @@ public class ShowOrderController extends BaseScreenController {
                             .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
                 }
             });
-        }else if ("Default".equals(selectedFilter)||selectedFilter == null){
-            setTables();
+        } else if ("Default".equals(selectedFilter) || selectedFilter == null) {
+            itemsTable.getItems().clear();
+            setOrderTable();
         }
     }
+
+
 }

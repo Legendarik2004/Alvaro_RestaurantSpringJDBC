@@ -16,6 +16,7 @@ import java.time.LocalDate;
 
 public class UpdateCustomerController extends BaseScreenController {
     private final CustomerService servicesCustomers;
+    @FXML
     public TableView<Customer> customersTable;
     @FXML
     public TableColumn<Integer, Customer> idCustomerColumn;
@@ -29,11 +30,18 @@ public class UpdateCustomerController extends BaseScreenController {
     public TableColumn<String, Customer> phoneCustomerColumn;
     @FXML
     public TableColumn<LocalDate, Customer> dobCustomerColumn;
+    public Customer selectedCustomer;
+    @FXML
     public TextField idField;
+    @FXML
     public TextField fnameField;
+    @FXML
     public TextField lnameField;
+    @FXML
     public TextField emailField;
+    @FXML
     public TextField phoneField;
+    @FXML
     public DatePicker dobField;
 
     @Inject
@@ -49,12 +57,12 @@ public class UpdateCustomerController extends BaseScreenController {
         phoneCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         dobCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("dob"));
         customersTable.setOnMouseClicked(this::handleTableClick);
-        idField.setEditable(false);
+        idField.setDisable(true);
     }
 
     private void handleTableClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            Customer selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
+            selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
             if (selectedCustomer != null) {
                 idField.setText(String.valueOf(selectedCustomer.getId()));
                 fnameField.setText(selectedCustomer.getFirstName());
@@ -71,27 +79,29 @@ public class UpdateCustomerController extends BaseScreenController {
         setTable();
     }
 
-    private void setTable() throws IOException {
+    private void setTable() {
         customersTable.getItems().clear();
         servicesCustomers.getAll().peek(customers -> customersTable.getItems().addAll(customers))
                 .peekLeft(customerError -> getPrincipalController().showErrorAlert(customerError.getMessage()));
     }
 
-    public void updateCustomer(ActionEvent actionEvent) throws IOException {
-//        if (Either.right(servicesCustomers
-//                .save(new Customer(Integer.parseInt(idField.getText()), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue()))) == 1) {
+    public void updateCustomer(ActionEvent actionEvent) {
+        if (fnameField.getText().isEmpty() || lnameField.getText().isEmpty() || emailField.getText().isEmpty() || phoneField.getText().isEmpty() || dobField.getValue() == null) {
             Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setTitle(Constants.ERROR);
-            a.setHeaderText(null);
-            a.setContentText(Constants.CUSTOMER_ADDED_SUCCESSFULLY);
+            a.setContentText(Constants.EMPTY_FIELD);
             a.show();
-            setTable();
-  //      } else {
-  //          Alert a = new Alert(Alert.AlertType.ERROR);
-  //          a.setTitle(Constants.ERROR);
-  //          a.setHeaderText(null);
-  //          a.setContentText(Constants.FAILED_TO_UPDATE_THE_CUSTOMER);
-  //          a.show();
-  //      }
+        } else {
+            servicesCustomers.update(new Customer(selectedCustomer.getId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue())).peek(success -> {
+                        if (success == 0) {
+                            setTable();
+                            getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_UPDATED_SUCCESSFULLY);
+
+                        }
+                    })
+                    .peekLeft(customerError -> {
+                        getPrincipalController().showErrorAlert(Constants.ERROR_UPDATING_CUSTOMER);
+
+                    });
+        }
     }
 }

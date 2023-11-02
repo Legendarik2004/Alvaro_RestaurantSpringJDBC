@@ -6,14 +6,12 @@ import jakarta.inject.Inject;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import model.User;
 import ui.screens.common.BaseScreenController;
@@ -31,6 +29,12 @@ public class PrincipalController {
     private Stage primaryStage;
     @FXML
     private MenuBar menuPrincipal;
+    @FXML
+    private Menu menuCustomers;
+    @FXML
+    private MenuItem addOrder;
+    @FXML
+    private MenuItem deleteOrder;
 
 
     @Inject
@@ -69,7 +73,7 @@ public class PrincipalController {
     public void showConfirmationAlert(String mensaje) {
         alert.setAlertType(Alert.AlertType.INFORMATION);
         alert.setContentText(mensaje);
-alert.setHeaderText(mensaje);
+        alert.setHeaderText(mensaje);
         alert.getDialogPane().lookupButton(ButtonType.OK).setId("btn-ok");
         alert.showAndWait();
     }
@@ -78,6 +82,16 @@ alert.setHeaderText(mensaje);
         actualUser = user;
         menuPrincipal.setVisible(true);
         cargarPantalla(Screens.WELCOME);
+
+        if (actualUser.getId() < 0) {
+            menuCustomers.setVisible(true);
+            addOrder.setVisible(false);
+            deleteOrder.setVisible(true);
+        } else {
+            menuCustomers.setVisible(false);
+            addOrder.setVisible(true);
+            deleteOrder.setVisible(false);
+        }
     }
 
 
@@ -93,27 +107,9 @@ alert.setHeaderText(mensaje);
 
 
     public void initialize() {
-        menuPrincipal.setVisible(true);
-       // cargarPantalla(Screens.LOGIN);
+        menuPrincipal.setVisible(false);
+        cargarPantalla(Screens.LOGIN);
     }
-
-//    private void closeWindowEvent(WindowEvent event) {
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.getButtonTypes().remove(ButtonType.OK);
-//        alert.getButtonTypes().add(ButtonType.CANCEL);
-//        alert.getButtonTypes().add(ButtonType.YES);
-//        alert.setTitle(Constants.QUIT_APPLICATION);
-//        alert.setContentText(Constants.CLOSE_WITHOUT_SAVING);
-//        alert.initOwner(primaryStage.getOwner());
-//        Optional<ButtonType> res = alert.showAndWait();
-//
-//
-//        res.ifPresent(buttonType -> {
-//            if (buttonType == ButtonType.CANCEL) {
-//                event.consume();
-//            }
-//        });
-//    }
 
     public void exit(ActionEvent actionEvent) {
         primaryStage.fireEvent(new WindowEvent(primaryStage, WindowEvent.WINDOW_CLOSE_REQUEST));

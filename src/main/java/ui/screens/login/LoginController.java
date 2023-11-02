@@ -3,7 +3,6 @@ package ui.screens.login;
 import common.Constants;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import model.User;
@@ -25,13 +24,16 @@ public class LoginController extends BaseScreenController {
 
     @FXML
     private void doLogin() {
-        User user = new User(userTextField.getText(), passTextField.getText());
-        if (servicesLogin.doLogin(user)) {
-            getPrincipalController().onLoginDone(user);
-        } else {
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(Constants.INCORRECT_USER_OR_PASSWORD);
-            a.show();
-        }
+        User user = new User(0, userTextField.getText(), passTextField.getText());
+
+        servicesLogin.doLogin(user).peek(success -> {
+                    if (success) {
+                        getPrincipalController().onLoginDone(servicesLogin.get());
+                    } else {
+                        getPrincipalController().showErrorAlert(Constants.INCORRECT_USER_OR_PASSWORD);
+                    }
+                })
+                .peekLeft(loginError -> getPrincipalController().showErrorAlert(Constants.INCORRECT_USER_OR_PASSWORD));
+
     }
 }

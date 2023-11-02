@@ -1,7 +1,10 @@
 package dao;
 
+import io.vavr.control.Either;
 import model.User;
+ import model.errors.Error;
 
 public interface LoginDAO {
-    boolean doLogin(User user);
+    Either<Error,Boolean> doLogin(User user);
+    User get();
 }

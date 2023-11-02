@@ -5,5 +5,6 @@
   <entry key="user_name">root</entry>
   <entry key="password">quevedo2dam</entry>
   <entry key="driver">com.mysql.cj.jdbc.Driver</entry>
+
 </properties>
 

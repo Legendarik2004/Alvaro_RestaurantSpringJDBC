@@ -2,21 +2,20 @@ package dao;
 
 import io.vavr.control.Either;
 import model.Order;
-import model.errors.CustomerError;
-import model.errors.OrderError;
+import model.errors.Error;
 
 import java.util.List;
 
 public interface OrderDAO {
-    Either<OrderError, List<Order>> getAll();
+    Either<Error, List<Order>> getAll();
 
-    Either<OrderError, List<Order>> get(int id);
+    Either<Error, List<Order>> get(int id);
 
-    Either<OrderError, Integer> save(Order c);
+    Either<Error, Integer> save(Order order);
 
-    Either<OrderError, Integer> update(Order c);
+    Either<Error, Integer> update(Order order);
 
-    Either<OrderError, Integer> delete(Order c);
+    Either<Error, Integer> delete(Order order);
 
-
+    int getAddedOrderId();
 }

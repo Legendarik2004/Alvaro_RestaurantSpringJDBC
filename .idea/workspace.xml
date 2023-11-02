@@ -4,38 +4,73 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fce01c5d-2056-4abd-aa06-0db4cdc1643c" name="Changes" comment="Add y show funcionan">
-      <change afterPath="$PROJECT_DIR$/src/main/java/dao/impl/DBConnection.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/mysql-properties.xml" afterDir="false" />
+    <list default="true" id="fce01c5d-2056-4abd-aa06-0db4cdc1643c" name="Changes" comment="Entrega JDBC">
+      <change afterPath="$PROJECT_DIR$/src/main/java/common/SQLQueries.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dao/OrderItemsDAO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dao/impl/DBConnectionPool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dao/impl/MenuItemsDaoImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dao/impl/OrderItemsDaoImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/OrderItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/services/OrderItemsService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/orders.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/customers.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/orders.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/common/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/common/Configuration.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/common/ConfigurationXML.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/OrderDAOXml.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/common/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/common/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/CustomersDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/CustomersDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/LoginDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/LoginDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/OrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/OrderDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/CustomerDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/CustomerDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImplCsv.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImplCsv.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImplXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/DBConnection.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/LoginDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/LoginDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImplCsv.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/MenuItem.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/xml/OrderItemXML.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/xml/OrderXML.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/xml/OrdersXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/errors/CustomerError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/errors/Error.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/errors/CustomerErrorEmptyList.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/errors/OrderError.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/model/errors/OrderErrorEmptyList.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/OrderServiceXML.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/CustomerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/LoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/LoginService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/common/ConstantsScreens.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/common/Screens.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/common/Screens.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/customers/AddCustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/customers/AddCustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/customers/ShowCustomersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/customers/ShowCustomersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/customers/DeleteCustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/customers/DeleteCustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/customers/UpdateCustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/customers/UpdateCustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/login/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/login/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/AddOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/AddOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/DeleteOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/DeleteOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/ShowOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/ShowOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/UpdateOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/UpdateOrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/principal/PrincipalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/principal/PrincipalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/customers/addCustomer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/customers/addCustomer.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/customers/deleteCustomer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/customers/deleteCustomer.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/customers/showCustomers.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/customers/showCustomers.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/customers/updateCustomer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/customers/updateCustomer.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/orders/addOrder.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/orders/addOrder.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/orders/deleteOrder.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/orders/deleteOrder.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/orders/showOrders.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/orders/showOrders.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/orders/updateOrder.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/orders/updateOrder.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/mysql-properties.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mysql-properties.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -59,7 +94,7 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/alvar/OneDrive/Documentos/2DAM/Acceso a datos/Multipantallas_AlvaroRdb/src/main/resources&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/alvar/OneDrive/Documentos/2DAM/Repositorios/Lucia/ADUnit2-JDBC-master&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -76,6 +111,18 @@
     ]
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="common.Constants" />
+      <recent name="common.SQLQueries" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="services" />
+      <recent name="model" />
+      <recent name="dao" />
+      <recent name="dao.impl" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="DIJavafx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ui.main.DIJavafx" />
@@ -90,11 +137,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.DIJavafx" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b697d157-42fb-4d67-8cd8-9ccfc7a31c3f" name="Changes" comment="" />
+      <changelist id="fce01c5d-2056-4abd-aa06-0db4cdc1643c" name="Changes" comment="Add y show funcionan" />
       <created>1694507812506</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -133,7 +185,27 @@
       <workItem from="1697666219058" duration="667000" />
       <workItem from="1697702492615" duration="4892000" />
       <workItem from="1697785762630" duration="917000" />
+      <workItem from="1698183128932" duration="1311000" />
+      <workItem from="1698216410581" duration="18768000" />
+      <workItem from="1698417852057" duration="1725000" />
+      <workItem from="1698485294667" duration="2270000" />
+      <workItem from="1698597396643" duration="1132000" />
+      <workItem from="1698653296239" duration="599000" />
+      <workItem from="1698752309881" duration="1402000" />
+      <workItem from="1698773393747" duration="5593000" />
+      <workItem from="1698842790575" duration="25577000" />
+      <workItem from="1698911516656" duration="15965000" />
+      <workItem from="1698964047609" duration="1691000" />
     </task>
+    <task id="LOCAL-00001" summary="Add y show funcionan">
+      <option name="closed" value="true" />
+      <created>1697788478255</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1697788478255</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -144,7 +216,8 @@
       <path value="$PROJECT_DIR$" />
     </ignored-roots>
     <MESSAGE value="Add y show funcionan" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add y show funcionan" />
+    <MESSAGE value="Entrega JDBC" />
+    <option name="LAST_COMMIT_MESSAGE" value="Entrega JDBC" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -153,11 +226,6 @@
           <properties class="java.lang.RuntimeException" package="java.lang" />
           <option name="timeStamp" value="5" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ui/screens/customers/UpdateCustomerController.java</url>
-          <line>83</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>

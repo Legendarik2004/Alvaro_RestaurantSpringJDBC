@@ -2,14 +2,17 @@ package ui.screens.orders;
 
 import common.Constants;
 import jakarta.inject.Inject;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import model.Item;
 import model.Order;
+import model.OrderItem;
+import services.OrderItemsService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
 
@@ -18,33 +21,44 @@ import java.security.Timestamp;
 
 public class DeleteOrderController extends BaseScreenController {
     private final OrderService orderService;
+    private final OrderItemsService orderItemsService;
+    @FXML
     public TableView<Order> ordersTable;
+    @FXML
     public TableColumn<Integer, Order> idOrderColumn;
+    @FXML
     public TableColumn<Timestamp, Order> dateOrderColumn;
+    @FXML
     public TableColumn<Integer, Order> customerOrderColumn;
+    @FXML
     public TableColumn<Integer, Order> tableOrderColumn;
-    public TableView<Item> itemsTable;
-    public TableColumn<Integer, Item> idItemColumn;
-    public TableColumn<String, Item> nameItemColumn;
-    public TableColumn<Float, Item> priceItemColumn;
-    public TableColumn<String, Item> descriptionItemColumn;
+    @FXML
+    public TableView<OrderItem> itemsTable;
+    @FXML
+    public TableColumn<Integer, OrderItem> idItemColumn;
+    @FXML
+    public TableColumn<OrderItem, String> nameItemColumn;
+    @FXML
+    public TableColumn<Integer, OrderItem> quantityItemColumn;
+
     private Order selectedOrder;
 
 
     @Inject
-    public DeleteOrderController(OrderService orderService) {
+    public DeleteOrderController(OrderService orderService, OrderItemsService orderItemsService) {
         this.orderService = orderService;
+        this.orderItemsService = orderItemsService;
     }
 
     public void initialize() throws IOException {
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("tableId"));
-        idItemColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        nameItemColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        priceItemColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        descriptionItemColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+
+        idItemColumn.setCellValueFactory(new PropertyValueFactory<>("orderItemId"));
+        nameItemColumn.setCellValueFactory((cellData -> new SimpleStringProperty(cellData.getValue().getMenuItem().getName())));
+        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         ordersTable.setOnMouseClicked(this::handleTableClick);
     }
 
@@ -55,41 +69,49 @@ public class DeleteOrderController extends BaseScreenController {
                 this.selectedOrder = selectedOrder;
             }
         }
+        setOrderItemTable();
     }
 
     @Override
     public void principalCargado() throws IOException {
-        setTables();
+        setOrderTable();
     }
 
-    private void setTables() {
+    private void setOrderTable() {
         ordersTable.getItems().clear();
         orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
                 .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
+
+    }
+
+    private void setOrderItemTable() {
+        if (selectedOrder != null) {
+            orderItemsService.getAllOrderItems(selectedOrder.getOrderId())
+                    .peek(orderItems -> {
+                        itemsTable.getItems().setAll(orderItems);
+                    })
+                    .peekLeft(noItems -> itemsTable.getItems().clear());
+        } else {
+            itemsTable.getItems().clear();
+        }
     }
 
     public void deleteOrder(ActionEvent actionEvent) {
-        if (selectedOrder != null) {
-
+        if (selectedOrder == null) {
             Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(Constants.SELECT_AN_ORDER);
+            a.setContentText(Constants.SELECT_ORDER_FIRST);
             a.show();
-
         } else {
-            int idMayor = orderService.getAll().get().stream().mapToInt(Order::getIdOrder).max().getAsInt();
-            idMayor++;
-//            orderService.save(new Order(idMayor, LocalDateTime.now(), Integer.parseInt(tableOrderField.getText()), Integer.parseInt(customerOrderFieldCombo.getValue().toString()))).peek(success -> {
-//                        if (success == 0) {
-//                            setTables();
-//                            getPrincipalController().showConfirmationAlert(Constants.ORDER_ADDED_SUCCESSFULLY);
-//
-//                        }
-//                    })
-//                    .peekLeft(customerError -> {
-//                        getPrincipalController().showErrorAlert(Constants.ERROR_ADDING_ORDER);
-//
-//                    });
-//
+
+            orderService.delete(selectedOrder).peek(success -> {
+                        if (success == 0) {
+                            setOrderTable();
+                            getPrincipalController().showConfirmationAlert(Constants.ORDER_DELETED_SUCCESSFULLY);
+                        }
+                    })
+                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_ORDER));
+
+
 
         }
     }

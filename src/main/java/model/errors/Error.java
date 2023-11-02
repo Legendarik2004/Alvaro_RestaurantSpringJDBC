@@ -5,16 +5,14 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public sealed class CustomerError permits CustomerErrorEmptyList {
+public class Error {
     private final int numError;
     private final String message;
-
     private final LocalDateTime date;
 
-    public CustomerError(int numError, String message) {
-        this.numError=numError;
+    public Error(int numError, String message) {
+        this.numError = numError;
         this.message = message;
         this.date = LocalDateTime.now();
-
     }
 }

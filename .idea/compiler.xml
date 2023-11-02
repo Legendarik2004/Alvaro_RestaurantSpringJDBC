@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Multipantallas_AlvaroRdb" />
+        <module name="SQLrestaurant_DavidRoldan" />
       </profile>
     </annotationProcessing>
   </component>

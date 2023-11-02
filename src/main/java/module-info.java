@@ -1,24 +1,18 @@
 module javafx {
 
-
     requires javafx.graphics;
     requires javafx.controls;
     requires javafx.fxml;
-
     requires lombok;
     requires org.apache.logging.log4j;
-
-
     requires jakarta.inject;
     requires jakarta.cdi;
     requires io.vavr;
-
+    requires com.zaxxer.hikari;
     requires MaterialFX;
-
-
-
     requires jakarta.xml.bind;
     requires java.sql;
+    requires commons.dbcp2;
     exports ui.main to javafx.graphics;
     exports ui.screens.principal;
     exports ui.screens.login;
@@ -29,6 +23,7 @@ module javafx {
     exports dao.impl;
     exports ui.screens.welcome;
     exports model.errors;
+    exports dao;
 
     opens ui.screens.login;
     opens ui.screens.principal;
@@ -39,4 +34,5 @@ module javafx {
     opens services;
     opens common;
     opens dao.impl;
+    opens dao;
 }

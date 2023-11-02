@@ -2,20 +2,19 @@ package dao;
 
 import io.vavr.control.Either;
 import model.Customer;
-import model.errors.CustomerError;
+import model.errors.Error;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface CustomersDAO {
 
-    Either<CustomerError, List<Customer>> getAll();
+    Either<Error, List<Customer>> getAll();
 
-    Either<CustomerError, Customer> get(int id);
+    Either<Error, Customer> get(int id);
 
-    Either<CustomerError, Integer> save(Customer c);
+    Either<Error, Integer> save(Customer c);
 
-    Either<CustomerError, Integer> update(Customer c);
+    Either<Error, Integer> update(Customer c);
 
-    Either<CustomerError, Integer> delete(Customer c);
+    Either<Error, Integer> delete(Customer c);
 }

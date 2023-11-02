@@ -20,9 +20,6 @@ import ui.screens.common.BaseScreenController;
 import java.io.IOException;
 import java.security.Timestamp;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class DeleteCustomerController extends BaseScreenController {
     private final CustomerService customerService;
@@ -68,7 +65,7 @@ public class DeleteCustomerController extends BaseScreenController {
         dobCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("dob"));
 
         customersTable.setOnMouseClicked(this::handleTableClick);
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("idOrder"));
+        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("tableId"));
@@ -81,60 +78,58 @@ public class DeleteCustomerController extends BaseScreenController {
                 this.selectedCustomer = selectedCustomer;
             }
         }
-        setTables();
+        setOrderTable();
     }
 
     @Override
     public void principalCargado() throws IOException {
-        setTables();
+        setCustomerTable();
     }
 
-    private void setTables() {
+    private void setCustomerTable() {
         customersTable.getItems().clear();
         customerService.getAll().peek(customers -> customersTable.getItems().addAll(customers))
                 .peekLeft(customerError -> getPrincipalController().showErrorAlert(customerError.getMessage()));
+    }
 
-
+    private void setOrderTable() {
         ordersTable.getItems().clear();
-        if (selectedCustomer != null)
+        if (selectedCustomer != null) {
             ordersTable.getItems().addAll(orderService.get(selectedCustomer.getId()).get());
-
+        }
     }
 
     public void deleteCustomer(ActionEvent actionEvent) {
         if (selectedCustomer == null) {
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(Constants.THERE_IS_AN_EMPTY_FIELD);
-            a.show();
+            getPrincipalController().showErrorAlert(Constants.SELECT_CUSTOMER_FIRST);
         } else {
             if (!ordersTable.getItems().isEmpty()) {
-                // Mostrar un diálogo de confirmación antes de eliminar si hay órdenes en la tabla
+                // Mostrar un diálogo de confirmación antes de eliminar si hay orders en la tabla
                 Alert a = new Alert(AlertType.CONFIRMATION);
                 a.setContentText("¿Seguro que quieres eliminar?");
-
 
                 a.showAndWait().ifPresent(response -> {
                     if (response == ButtonType.OK) {
                         customerService.delete(selectedCustomer).peek(success -> {
                                     if (success == 0) {
-                                        setTables();
-                                        getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_DELETED);
+                                        setCustomerTable();
+                                        getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_DELETED_SUCCESSFULLY);
                                     }
                                 })
                                 .peekLeft(customerError -> {
-                                    getPrincipalController().showErrorAlert(Constants.FAILED_TO_DELETE_THE_CUSTOMER);
+                                    getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_CUSTOMER);
                                 });
                     }
                 });
             } else {
                 customerService.delete(selectedCustomer).peek(success -> {
                             if (success == 0) {
-                                setTables();
-                                getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_DELETED);
+                                setCustomerTable();
+                                getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_DELETED_SUCCESSFULLY);
                             }
                         })
                         .peekLeft(customerError -> {
-                            getPrincipalController().showErrorAlert(Constants.FAILED_TO_DELETE_THE_CUSTOMER);
+                            getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_CUSTOMER);
                         });
             }
         }

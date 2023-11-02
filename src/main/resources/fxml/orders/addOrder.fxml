@@ -10,23 +10,22 @@
             <Font size="22.0" />
         </font>
     </Label>
-    <Label layoutX="626.0" layoutY="183.0" text="Order Items">
+    <Label layoutX="596.0" layoutY="60.0" text="Order Items">
         <font>
             <Font size="16.0" />
         </font>
     </Label>
-    <TableView fx:id="itemsTable" layoutX="473.0" layoutY="209.0" prefHeight="200.0" prefWidth="390.0">
+    <TableView fx:id="itemsTable" layoutX="508.0" layoutY="99.0" prefHeight="300.0" prefWidth="262.0">
         <columns>
-            <TableColumn fx:id="idItemColumn" prefWidth="50" text="Id" />
-            <TableColumn fx:id="menuItemColumn" prefWidth="85" text="Name" />
-            <TableColumn fx:id="quantityItemColumn" prefWidth="195" text="Quantity" />
+            <TableColumn fx:id="idItemColumn" prefWidth="50" style="-fx-alignment: center" text="Id" />
+            <TableColumn fx:id="menuItemColumn" prefWidth="145" text="Name" />
+            <TableColumn fx:id="quantityItemColumn" prefWidth="65" style="-fx-alignment: center" text="Quantity" />
         </columns>
     </TableView>
-    <Button layoutX="414.0" layoutY="421.0" mnemonicParsing="false" onAction="#addOrder" text="Add Order" />
-    <TextField fx:id="tableOrderField" layoutX="73.0" layoutY="144.0" promptText="Table number" />
-    <ComboBox fx:id="itemsComboBox" layoutX="473.0" layoutY="86.0" prefHeight="26.0" prefWidth="150.0" promptText="Menu items" />
-    <TextField fx:id="quantityItemField" layoutX="473.0" layoutY="131.0" promptText="Quantity" />
-    <Button layoutX="770.0" layoutY="105.0" mnemonicParsing="false" onAction="#addItem" text="Add" />
-    <Button layoutX="692.0" layoutY="105.0" mnemonicParsing="false" onAction="#removeItem" text="Remove" />
-   <ComboBox fx:id="customerOrderFieldCombo" layoutX="72.0" layoutY="196.0" prefWidth="150.0" promptText="Customer" />
+    <Button layoutX="414.0" layoutY="443.0" mnemonicParsing="false" onAction="#addOrder" text="Add Order" />
+    <TextField fx:id="tableOrderField" layoutX="66.0" layoutY="86.0" promptText="Table number" />
+    <ComboBox fx:id="itemsComboBox" layoutX="65.0" layoutY="209.0" prefHeight="26.0" prefWidth="150.0" promptText="Menu items" />
+    <TextField fx:id="quantityItemField" layoutX="233.0" layoutY="209.0" promptText="Quantity" />
+    <Button layoutX="66.0" layoutY="283.0" mnemonicParsing="false" onAction="#addItem" text="Add" />
+    <Button layoutX="140.0" layoutY="283.0" mnemonicParsing="false" onAction="#removeItem" text="Remove" />
 </AnchorPane>

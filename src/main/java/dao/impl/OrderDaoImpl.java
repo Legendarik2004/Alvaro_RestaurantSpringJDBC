@@ -91,7 +91,6 @@ public class OrderDaoImpl implements OrderDAO {
                 ResultSet rs = preparedStatement.getGeneratedKeys();
                 if (rs.next()){
                     addedOrderId = rs.getInt(1);
-                    System.out.println(addedOrderId);
                 }
                 result = Either.right(0);
             } else {

@@ -2,7 +2,6 @@ package ui.screens.customers;
 
 import common.Constants;
 import jakarta.inject.Inject;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -56,7 +55,7 @@ public class DeleteCustomerController extends BaseScreenController {
         this.orderService = orderService;
     }
 
-    public void initialize() throws IOException {
+    public void initialize() {
         idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -73,9 +72,9 @@ public class DeleteCustomerController extends BaseScreenController {
 
     private void handleTableClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            Customer selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
-            if (selectedCustomer != null) {
-                this.selectedCustomer = selectedCustomer;
+            Customer newSelectedCustomer = customersTable.getSelectionModel().getSelectedItem();
+            if (newSelectedCustomer != null) {
+                this.selectedCustomer = newSelectedCustomer;
             }
         }
         setOrderTable();
@@ -100,7 +99,7 @@ public class DeleteCustomerController extends BaseScreenController {
     }
 
     //TODO arreglar metodo
-    public void deleteCustomer(ActionEvent actionEvent) {
+    public void deleteCustomer() {
         if (selectedCustomer == null) {
             getPrincipalController().showErrorAlert(Constants.SELECT_CUSTOMER_FIRST);
         } else {

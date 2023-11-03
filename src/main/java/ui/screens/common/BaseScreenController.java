@@ -18,6 +18,6 @@ public class BaseScreenController {
     }
 
     public void principalCargado() throws IOException {
-
+        //NOP
     }
 }

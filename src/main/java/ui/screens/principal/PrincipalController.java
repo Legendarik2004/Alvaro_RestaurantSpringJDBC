@@ -19,10 +19,11 @@ import ui.screens.common.Screens;
 
 import java.io.IOException;
 
+@Data
 @Log4j2
 public class PrincipalController {
     private final Alert alert;
-    public User actualUser;
+    private User actualUser;
     @FXML
     public BorderPane root;
     Instance<Object> instance;
@@ -111,46 +112,33 @@ public class PrincipalController {
         cargarPantalla(Screens.LOGIN);
     }
 
-    public void exit(ActionEvent actionEvent) {
+    public void exit() {
         primaryStage.fireEvent(new WindowEvent(primaryStage, WindowEvent.WINDOW_CLOSE_REQUEST));
     }
 
     public void setStage(Stage stage) {
         primaryStage = stage;
-        //primaryStage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent);
     }
 
     public void menuCustomers(ActionEvent actionEvent) {
         switch (((MenuItem) actionEvent.getSource()).getId()) {
-            case "listCustomers":
-                cargarPantalla(Screens.CUSTOMERS);
-                break;
-            case "addCustomer":
-                cargarPantalla(Screens.ADDCUSTOMERS);
-                break;
-            case "updateCustomer":
-                cargarPantalla(Screens.UPDATECUSTOMERS);
-                break;
-            case "deleteCustomer":
-                cargarPantalla(Screens.DELETECUSTOMERS);
-                break;
+            case "listCustomers" -> cargarPantalla(Screens.CUSTOMERS);
+            case "addCustomer" -> cargarPantalla(Screens.ADDCUSTOMERS);
+            case "updateCustomer" -> cargarPantalla(Screens.UPDATECUSTOMERS);
+            case "deleteCustomer" -> cargarPantalla(Screens.DELETECUSTOMERS);
+            default ->
+                    throw new IllegalStateException("Unexpected value: " + ((MenuItem) actionEvent.getSource()).getId());
         }
     }
 
     public void menuOrders(ActionEvent actionEvent) {
         switch (((MenuItem) actionEvent.getSource()).getId()) {
-            case "listOrders":
-                cargarPantalla(Screens.ORDERS);
-                break;
-            case "addOrder":
-                cargarPantalla(Screens.ADDORDERS);
-                break;
-            case "updateOrder":
-                cargarPantalla(Screens.UPDATEORDERS);
-                break;
-            case "deleteOrder":
-                cargarPantalla(Screens.DELETEORDERS);
-                break;
+            case "listOrders" -> cargarPantalla(Screens.ORDERS);
+            case "addOrder" -> cargarPantalla(Screens.ADDORDERS);
+            case "updateOrder" -> cargarPantalla(Screens.UPDATEORDERS);
+            case "deleteOrder" -> cargarPantalla(Screens.DELETEORDERS);
+            default ->
+                    throw new IllegalStateException("Unexpected value: " + ((MenuItem) actionEvent.getSource()).getId());
         }
     }
 }

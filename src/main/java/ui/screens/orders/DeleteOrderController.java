@@ -3,7 +3,6 @@ package ui.screens.orders;
 import common.Constants;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
@@ -12,7 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import model.Order;
 import model.OrderItem;
-import services.OrderItemsService;
+import services.OrderItemService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
 
@@ -22,7 +21,7 @@ import java.security.Timestamp;
 
 public class DeleteOrderController extends BaseScreenController {
     private final OrderService orderService;
-    private final OrderItemsService orderItemsService;
+    private final OrderItemService orderItemService;
     @FXML
     public TableView<Order> ordersTable;
     @FXML
@@ -46,12 +45,12 @@ public class DeleteOrderController extends BaseScreenController {
 
 
     @Inject
-    public DeleteOrderController(OrderService orderService, OrderItemsService orderItemsService) {
+    public DeleteOrderController(OrderService orderService, OrderItemService orderItemService) {
         this.orderService = orderService;
-        this.orderItemsService = orderItemsService;
+        this.orderItemService = orderItemService;
     }
 
-    public void initialize() throws IOException {
+    public void initialize() {
         idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
@@ -65,9 +64,9 @@ public class DeleteOrderController extends BaseScreenController {
 
     private void handleTableClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
-            if (selectedOrder != null) {
-                this.selectedOrder = selectedOrder;
+            Order newSelectedOrder = ordersTable.getSelectionModel().getSelectedItem();
+            if (newSelectedOrder != null) {
+                this.selectedOrder = newSelectedOrder;
             }
         }
         setOrderItemTable();
@@ -87,7 +86,7 @@ public class DeleteOrderController extends BaseScreenController {
 
     private void setOrderItemTable() {
         if (selectedOrder != null) {
-            orderItemsService.getAllOrderItems(selectedOrder.getOrderId())
+            orderItemService.getAllOrderItems(selectedOrder.getOrderId())
                     .peek(orderItems -> itemsTable.getItems().setAll(orderItems))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
         } else {
@@ -95,15 +94,15 @@ public class DeleteOrderController extends BaseScreenController {
         }
     }
 
-    public void deleteOrder(ActionEvent actionEvent) {
+    public void deleteOrder() {
         if (selectedOrder == null) {
             Alert a = new Alert(Alert.AlertType.ERROR);
             a.setContentText(Constants.SELECT_ORDER_FIRST);
             a.show();
         } else {
 
-            orderItemsService.getAllOrderItems(selectedOrder.getOrderId())
-                    .peek(orderItemsList -> orderItemsList.forEach(orderItemsService::delete))
+            orderItemService.getAllOrderItems(selectedOrder.getOrderId())
+                    .peek(orderItemsList -> orderItemsList.forEach(orderItemService::delete))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
 
             orderService.delete(selectedOrder).peek(success -> {

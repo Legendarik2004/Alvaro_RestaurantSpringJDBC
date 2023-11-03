@@ -6,26 +6,25 @@ import common.Configuration;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import org.apache.commons.dbcp2.BasicDataSource;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @Singleton
 public class DBConnectionPool {
 
-    private Configuration config;
-    private DataSource hikariDataSource;
-    private BasicDataSource basicDataSource;
+    private final Configuration config;
+    private final DataSource hikariDataSource;
+
 
     @Inject
     public DBConnectionPool(Configuration config) {
         this.config = config;
         hikariDataSource = getHikariPool();
-        basicDataSource = getBasicPool();
-
     }
 
     private DataSource getHikariPool() {
@@ -43,32 +42,15 @@ public class DBConnectionPool {
         return new HikariDataSource(hikariConfig);
     }
 
-    private BasicDataSource getBasicPool() {
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setUsername(config.getProperty("user_name"));
-        basicDataSource.setPassword(config.getProperty("password"));
-        basicDataSource.setUrl(config.getProperty("urlDB"));
-
-        return basicDataSource;
-    }
-
     public Connection getConnection() {
         Connection con = null;
         try {
             con = hikariDataSource.getConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(DBConnectionPool.class.getName()).log(Level.SEVERE, null, e);
         }
 
         return con;
-    }
-
-    public void closeConnection(Connection con) {
-        try {
-            con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
     @PreDestroy

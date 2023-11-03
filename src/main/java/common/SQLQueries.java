@@ -1,6 +1,10 @@
 package common;
 
 public class SQLQueries {
+    public static final String QUERY = "SELECT * FROM menu_items";
+
+    private SQLQueries() {
+    }
 
     //CREDENTIALS
     public static final String ADD_CREDENTIALS = "INSERT INTO credentials (user_name, password) VALUES (?, ?)";

@@ -7,7 +7,6 @@ import io.vavr.control.Either;
 import jakarta.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import model.MenuItem;
-import model.Order;
 import model.OrderItem;
 import model.errors.Error;
 
@@ -61,7 +60,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
             }
             result = Either.right(orderItems);
         } catch (SQLException e) {
-            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(OrderItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
         }
         return result;
@@ -69,10 +68,10 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
 
 
     @Override
-    public Either<Error, List<Order>> get(int id) {
-
-        //return Either.right(getAll().get().stream().filter(order -> order.getCustomerId() == id).toList());
-        return Either.right(new ArrayList<>());
+    public Either<Error, List<OrderItem>> get(int id) {
+        Either<Error, List<OrderItem>> result;
+        result = Either.right(getAll(id).get().stream().filter(orderItem -> orderItem.getOrderId() == id).toList());
+        return result;
     }
 
 
@@ -95,7 +94,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
                 result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_ITEM));
             }
         } catch (SQLException e) {
-            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(OrderItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_ITEM));
         }
         return result;
@@ -125,7 +124,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
                 result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_ITEM));
             }
         } catch (SQLException e) {
-            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(OrderItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_ITEM));
         }
         return result;

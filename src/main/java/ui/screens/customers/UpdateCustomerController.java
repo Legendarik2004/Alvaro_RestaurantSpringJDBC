@@ -2,7 +2,6 @@ package ui.screens.customers;
 
 import common.Constants;
 import jakarta.inject.Inject;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,7 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class UpdateCustomerController extends BaseScreenController {
-    private final CustomerService servicesCustomers;
+    private final CustomerService customerService;
     @FXML
     public TableView<Customer> customersTable;
     @FXML
@@ -30,7 +29,7 @@ public class UpdateCustomerController extends BaseScreenController {
     public TableColumn<String, Customer> phoneCustomerColumn;
     @FXML
     public TableColumn<LocalDate, Customer> dobCustomerColumn;
-    public Customer selectedCustomer;
+    private Customer selectedCustomer;
     @FXML
     public TextField idField;
     @FXML
@@ -45,11 +44,11 @@ public class UpdateCustomerController extends BaseScreenController {
     public DatePicker dobField;
 
     @Inject
-    public UpdateCustomerController(CustomerService servicesCustomers) {
-        this.servicesCustomers = servicesCustomers;
+    public UpdateCustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
-    public void initialize() throws IOException {
+    public void initialize() {
         idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -62,8 +61,9 @@ public class UpdateCustomerController extends BaseScreenController {
 
     private void handleTableClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            selectedCustomer = customersTable.getSelectionModel().getSelectedItem();
-            if (selectedCustomer != null) {
+            Customer newSelectedCustomer = customersTable.getSelectionModel().getSelectedItem();
+            if (newSelectedCustomer != null) {
+                this.selectedCustomer = newSelectedCustomer;
                 idField.setText(String.valueOf(selectedCustomer.getId()));
                 fnameField.setText(selectedCustomer.getFirstName());
                 lnameField.setText(selectedCustomer.getLastName());
@@ -81,27 +81,24 @@ public class UpdateCustomerController extends BaseScreenController {
 
     private void setTable() {
         customersTable.getItems().clear();
-        servicesCustomers.getAll().peek(customers -> customersTable.getItems().addAll(customers))
+        customerService.getAll().peek(customers -> customersTable.getItems().addAll(customers))
                 .peekLeft(customerError -> getPrincipalController().showErrorAlert(customerError.getMessage()));
     }
 
-    public void updateCustomer(ActionEvent actionEvent) {
+    public void updateCustomer() {
         if (fnameField.getText().isEmpty() || lnameField.getText().isEmpty() || emailField.getText().isEmpty() || phoneField.getText().isEmpty() || dobField.getValue() == null) {
             Alert a = new Alert(Alert.AlertType.ERROR);
             a.setContentText(Constants.EMPTY_FIELD);
             a.show();
         } else {
-            servicesCustomers.update(new Customer(selectedCustomer.getId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue())).peek(success -> {
+            customerService.update(new Customer(selectedCustomer.getId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue())).peek(success -> {
                         if (success == 0) {
                             setTable();
                             getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_UPDATED_SUCCESSFULLY);
 
                         }
                     })
-                    .peekLeft(customerError -> {
-                        getPrincipalController().showErrorAlert(Constants.ERROR_UPDATING_CUSTOMER);
-
-                    });
+                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_UPDATING_CUSTOMER));
         }
     }
 }

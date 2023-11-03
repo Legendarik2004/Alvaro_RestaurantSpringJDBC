@@ -10,25 +10,26 @@ import services.LoginService;
 import ui.screens.common.BaseScreenController;
 
 public class LoginController extends BaseScreenController {
+    @FXML
     public BorderPane loginPane;
     @FXML
     private TextField userTextField;
     @FXML
     private TextField passTextField;
-    private final LoginService servicesLogin;
+    private final LoginService loginService;
 
     @Inject
-    LoginController(LoginService servicesLogin) {
-        this.servicesLogin = servicesLogin;
+    LoginController(LoginService loginService) {
+        this.loginService = loginService;
     }
 
     @FXML
     private void doLogin() {
         User user = new User(0, userTextField.getText(), passTextField.getText());
 
-        servicesLogin.doLogin(user).peek(success -> {
-                    if (success) {
-                        getPrincipalController().onLoginDone(servicesLogin.get());
+        loginService.doLogin(user).peek(success -> {
+                    if (Boolean.TRUE.equals(success)) {
+                        getPrincipalController().onLoginDone(loginService.get());
                     } else {
                         getPrincipalController().showErrorAlert(Constants.INCORRECT_USER_OR_PASSWORD);
                     }

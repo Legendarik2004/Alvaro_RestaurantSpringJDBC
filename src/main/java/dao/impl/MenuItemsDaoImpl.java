@@ -1,6 +1,7 @@
 package dao.impl;
 
 import common.Constants;
+import common.SQLQueries;
 import dao.MenuItemsDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
@@ -31,7 +32,7 @@ public class MenuItemsDaoImpl implements MenuItemsDAO {
         Either<Error, List<MenuItem>> result;
 
         try (Connection myConnection = db.getConnection();
-             PreparedStatement preparedStatement = myConnection.prepareStatement("SELECT * FROM menu_items");
+             PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.QUERY)
         ) {
 
 
@@ -58,7 +59,7 @@ public class MenuItemsDaoImpl implements MenuItemsDAO {
             }
             result = Either.right(menuItems);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(MenuItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
         }
         return result;

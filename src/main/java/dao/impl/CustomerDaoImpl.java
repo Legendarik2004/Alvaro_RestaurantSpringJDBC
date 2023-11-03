@@ -35,15 +35,15 @@ public class CustomerDaoImpl implements CustomersDAO {
             ResultSet rs = statement.executeQuery(SQLQueries.GETALL_CUSTOMERS);
 
 
-            result = Either.right(readRS(rs).get());
+            result = Either.right(readRSGetAll(rs).get());
         } catch (SQLException e) {
-            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
         }
         return result;
     }
 
-    private Either<Error, List<Customer>> readRS(ResultSet rs) {
+    private Either<Error, List<Customer>> readRSGetAll(ResultSet rs) {
         Either<Error, List<Customer>> either;
         try {
             List<Customer> customers = new ArrayList<>();
@@ -60,7 +60,7 @@ public class CustomerDaoImpl implements CustomersDAO {
             }
             either = Either.right(customers);
         } catch (SQLException e) {
-            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
 
             either = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
         }
@@ -100,33 +100,42 @@ public class CustomerDaoImpl implements CustomersDAO {
                 result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CREDENTIALS));
             } else {
                 ResultSet generatedKeys = preparedStatementCredentials.getGeneratedKeys();
+
+
                 if (generatedKeys.next()) {
-                    try (PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.ADD_CUSTOMER)) {
-                        preparedStatement.setInt(1, generatedKeys.getInt(1));
-                        preparedStatement.setString(2, customer.getFirstName());
-                        preparedStatement.setString(3, customer.getLastName());
-                        preparedStatement.setString(4, customer.getEmail());
-                        preparedStatement.setString(5, customer.getPhone());
-                        preparedStatement.setDate(6, Date.valueOf(customer.getDob()));
-
-                        int rowsAdded = preparedStatement.executeUpdate();
-
-                        if (rowsAdded > 0) {
-                            result = Either.right(0);
-                        } else {
-                            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
-                        }
-                    } catch (SQLException e) {
-                        Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-                        result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
-                    }
-                } else{
+                    result = readRSSave(generatedKeys, myConnection, customer);
+                } else {
                     result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
                 }
             }
         } catch (SQLException e) {
-            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CREDENTIALS));
+        }
+        return result;
+    }
+
+    public Either<Error, Integer> readRSSave(ResultSet generatedKeys, Connection myConnection, Customer customer) {
+        Either<Error, Integer> result;
+
+        try (PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.ADD_CUSTOMER)) {
+            preparedStatement.setInt(1, generatedKeys.getInt(1));
+            preparedStatement.setString(2, customer.getFirstName());
+            preparedStatement.setString(3, customer.getLastName());
+            preparedStatement.setString(4, customer.getEmail());
+            preparedStatement.setString(5, customer.getPhone());
+            preparedStatement.setDate(6, Date.valueOf(customer.getDob()));
+
+            int rowsAdded = preparedStatement.executeUpdate();
+
+            if (rowsAdded > 0) {
+                result = Either.right(0);
+            } else {
+                result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
         }
         return result;
     }
@@ -153,7 +162,7 @@ public class CustomerDaoImpl implements CustomersDAO {
                 result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_UPDATING_CUSTOMER));
             }
         } catch (SQLException e) {
-            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_UPDATING_CUSTOMER));
         }
         return result;
@@ -177,7 +186,7 @@ public class CustomerDaoImpl implements CustomersDAO {
                 result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_DELETING_CUSTOMER));
             }
         } catch (SQLException e) {
-            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_UPDATING_CUSTOMER));
         }
         return result;

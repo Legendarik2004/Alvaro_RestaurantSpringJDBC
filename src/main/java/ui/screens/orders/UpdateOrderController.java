@@ -3,7 +3,6 @@ package ui.screens.orders;
 import common.Constants;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -12,7 +11,7 @@ import model.MenuItem;
 import model.Order;
 import model.OrderItem;
 import model.User;
-import services.OrderItemsService;
+import services.OrderItemService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
 
@@ -23,7 +22,7 @@ import java.time.Instant;
 public class UpdateOrderController extends BaseScreenController {
 
     private final OrderService orderService;
-    private final OrderItemsService orderItemsService;
+    private final OrderItemService orderItemService;
     @FXML
     public TableView<Order> ordersTable;
     @FXML
@@ -38,6 +37,7 @@ public class UpdateOrderController extends BaseScreenController {
     public TableView<OrderItem> itemsTable;
     @FXML
     public TableColumn<OrderItem, String> nameItemColumn;
+    @FXML
     public TableColumn<Integer, OrderItem> quantityItemColumn;
     @FXML
     public DatePicker dateField;
@@ -49,17 +49,17 @@ public class UpdateOrderController extends BaseScreenController {
     public TextField quantityItemField;
     @FXML
     public ComboBox<String> itemsComboBox;
-    public Order selectedOrder;
+    private Order selectedOrder;
     private OrderItem selectedOrderItem;
     private User actualUser;
 
     @Inject
-    public UpdateOrderController(OrderService orderService, OrderItemsService orderItemsService) {
+    public UpdateOrderController(OrderService orderService, OrderItemService orderItemService) {
         this.orderService = orderService;
-        this.orderItemsService = orderItemsService;
+        this.orderItemService = orderItemService;
     }
 
-    public void initialize() throws IOException {
+    public void initialize() {
         idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
         dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
@@ -69,20 +69,20 @@ public class UpdateOrderController extends BaseScreenController {
         quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         ordersTable.setOnMouseClicked(this::handleOrderTableClick);
         itemsTable.setOnMouseClicked(this::handleItemTableClick);
-        itemsComboBox.getItems().addAll(orderItemsService.getAllMenuItems().get().stream().map(MenuItem::getName).toList());
+        itemsComboBox.getItems().addAll(orderItemService.getAllMenuItems().get().stream().map(MenuItem::getName).toList());
         customerOrderField.setDisable(true);
         dateField.setDisable(true);
     }
 
     private void handleOrderTableClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            Order selectedOrder = ordersTable.getSelectionModel().getSelectedItem();
-            this.selectedOrder = selectedOrder;
+            Order newSelectedOrder = ordersTable.getSelectionModel().getSelectedItem();
+            this.selectedOrder = newSelectedOrder;
 
-            if (selectedOrder != null) {
-                tableOrderField.setText(String.valueOf(selectedOrder.getTableId()));
-                customerOrderField.setText(String.valueOf(selectedOrder.getCustomerId()));
-                dateField.setValue(selectedOrder.getDate().toLocalDateTime().toLocalDate());
+            if (newSelectedOrder != null) {
+                tableOrderField.setText(String.valueOf(newSelectedOrder.getTableId()));
+                customerOrderField.setText(String.valueOf(newSelectedOrder.getCustomerId()));
+                dateField.setValue(newSelectedOrder.getDate().toLocalDateTime().toLocalDate());
             }
         }
         setOrderItemTable();
@@ -90,9 +90,9 @@ public class UpdateOrderController extends BaseScreenController {
 
     private void handleItemTableClick(MouseEvent event) {
         if (event.getClickCount() == 1) {
-            OrderItem selectedOrderItem = itemsTable.getSelectionModel().getSelectedItem();
-            if (selectedOrderItem != null) {
-                this.selectedOrderItem = selectedOrderItem;
+            OrderItem newSelectedOrderItem = itemsTable.getSelectionModel().getSelectedItem();
+            if (newSelectedOrderItem != null) {
+                this.selectedOrderItem = newSelectedOrderItem;
 
             }
         }
@@ -101,7 +101,7 @@ public class UpdateOrderController extends BaseScreenController {
 
     @Override
     public void principalCargado() throws IOException {
-        actualUser = getPrincipalController().actualUser;
+        actualUser = getPrincipalController().getActualUser();
         setTables();
     }
 
@@ -121,7 +121,7 @@ public class UpdateOrderController extends BaseScreenController {
 
     private void setOrderItemTable() {
         if (selectedOrder != null) {
-            orderItemsService.getAllOrderItems(selectedOrder.getOrderId())
+            orderItemService.getAllOrderItems(selectedOrder.getOrderId())
                     .peek(orderItems -> itemsTable.getItems().setAll(orderItems))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
             itemsComboBox.setDisable(false);
@@ -129,8 +129,9 @@ public class UpdateOrderController extends BaseScreenController {
             itemsTable.getItems().clear();
         }
     }
-//TODO añadir orderItems en database
-    public void updateOrder(ActionEvent actionEvent) {
+
+    //TODO añadir orderItems en database
+    public void updateOrder() {
         if (tableOrderField.getText().isEmpty()) {
             Alert a = new Alert(Alert.AlertType.ERROR);
             a.setContentText(Constants.EMPTY_FIELD);
@@ -148,7 +149,7 @@ public class UpdateOrderController extends BaseScreenController {
     }
 
     @FXML
-    public void addItem(ActionEvent actionEvent) {
+    public void addItem() {
         if (selectedOrder == null) {
             getPrincipalController().showErrorAlert(Constants.SELECT_ORDER_FIRST);
         } else {
@@ -157,7 +158,7 @@ public class UpdateOrderController extends BaseScreenController {
                 a.setContentText(Constants.EMPTY_FIELD);
                 a.show();
             } else {
-                MenuItem add = orderItemsService.getAllMenuItems().get().stream()
+                MenuItem add = orderItemService.getAllMenuItems().get().stream()
                         .filter(menuItem -> menuItem.getName().equals(itemsComboBox.getValue()))
                         .findFirst().orElse(null);
                 if (add != null) {
@@ -172,7 +173,7 @@ public class UpdateOrderController extends BaseScreenController {
     }
 
     @FXML
-    public void removeItem(ActionEvent actionEvent) {
+    public void removeItem() {
         if (itemsTable.getItems().remove(selectedOrderItem)) {
             getPrincipalController().showConfirmationAlert(Constants.ITEM_REMOVED_SUCCESSFULLY);
             selectedOrderItem = null;

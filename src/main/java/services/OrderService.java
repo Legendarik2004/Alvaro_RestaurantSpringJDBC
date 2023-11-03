@@ -1,37 +1,21 @@
 package services;
 
-import dao.OrderDAO;
 import io.vavr.control.Either;
-import jakarta.inject.Inject;
 import model.Order;
 import model.errors.Error;
 
 import java.util.List;
 
-public class OrderService {
-    @Inject
-    private OrderDAO dao;
+public interface OrderService {
+    Either<Error, List<Order>> getAll();
 
-    public Either<Error, List<Order>> getAll() {
-        return dao.getAll();
-    }
+    Either<Error, List<Order>> get(int id);
 
-    public Either<Error, List<Order>> get(int id) {
-        return dao.get(id);
-    }
+    Either<Error, Integer> save(Order o);
 
-    public Either<Error, Integer> save(Order o) {
-        return dao.save(o);
-    }
+    Either<Error, Integer> update(Order o);
 
-    public Either<Error, Integer> update(Order o) {
-        return dao.update(o);
-    }
+    Either<Error, Integer> delete(Order o);
 
-    public Either<Error, Integer> delete(Order o) {
-        return dao.delete(o);
-    }
-
-    public int getAddedOrderId() {return dao.getAddedOrderId();
-    }
+    int getAddedOrderId();
 }

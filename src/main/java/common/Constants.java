@@ -2,6 +2,9 @@ package common;
 
 public class Constants {
 
+    private Constants() {
+    }
+
     public static final int NUM_ERROR = 1;
 
     public static final String ERROR = "Error";

@@ -1,5 +1,8 @@
 package ui.screens.common;
 
+import lombok.Getter;
+
+@Getter
 public enum Screens {
 
     PRINCIPAL("/fxml/principal.fxml"),
@@ -14,15 +17,9 @@ public enum Screens {
     LOGIN("/fxml/login.fxml"),
     WELCOME("/fxml/welcome.fxml");
 
-    private String ruta;
+    private final String ruta;
 
     Screens(String ruta) {
         this.ruta = ruta;
     }
-
-    public String getRuta() {
-        return ruta;
-    }
-
-
 }

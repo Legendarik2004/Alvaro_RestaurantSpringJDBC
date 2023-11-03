@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class ShowCustomersController extends BaseScreenController {
-    private final CustomerService servicesCustomers;
+    private final CustomerService customerService;
     @FXML
     public TableView<Customer> customersTable;
     @FXML
@@ -30,11 +30,11 @@ public class ShowCustomersController extends BaseScreenController {
     public TableColumn<LocalDate, Customer> dobCustomerColumn;
 
     @Inject
-    public ShowCustomersController(CustomerService servicesCustomers) {
-        this.servicesCustomers = servicesCustomers;
+    public ShowCustomersController(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
-    public void initialize() throws IOException {
+    public void initialize() {
         idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
@@ -50,7 +50,7 @@ public class ShowCustomersController extends BaseScreenController {
 
     private void setTables() {
         customersTable.getItems().clear();
-        servicesCustomers.getAll().peek(customers -> customersTable.getItems().addAll(customers))
+        customerService.getAll().peek(customers -> customersTable.getItems().addAll(customers))
                 .peekLeft(customerError -> getPrincipalController().showErrorAlert(customerError.getMessage()));
     }
 

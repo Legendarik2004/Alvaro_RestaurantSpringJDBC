@@ -8,8 +8,12 @@ import javafx.fxml.FXMLLoader;
 
 public class FXMLLoaderProducer {
 
-    @Inject
+
     Instance<Object> instance;
+    @Inject
+    public FXMLLoaderProducer(Instance<Object> instance) {
+        this.instance = instance;
+    }
 
     @Produces
     public FXMLLoader createLoader() {

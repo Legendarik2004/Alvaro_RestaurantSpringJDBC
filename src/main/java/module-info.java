@@ -25,6 +25,7 @@ module javafx {
     exports model.errors;
     exports dao;
     exports services;
+    exports common;
 
     opens ui.screens.login;
     opens ui.screens.principal;
@@ -36,4 +37,6 @@ module javafx {
     opens common;
     opens dao.impl;
     opens dao;
+    exports services.impl;
+    opens services.impl;
 }

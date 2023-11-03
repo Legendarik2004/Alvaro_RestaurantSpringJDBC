@@ -5,60 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fce01c5d-2056-4abd-aa06-0db4cdc1643c" name="Changes" comment="Entrega JDBC">
-      <change afterPath="$PROJECT_DIR$/src/main/java/common/SQLQueries.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dao/OrderItemsDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dao/impl/DBConnectionPool.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dao/impl/MenuItemsDaoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dao/impl/OrderItemsDaoImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/model/OrderItem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/services/OrderItemsService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dao/MenuItemsDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/customers.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/orders.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/common/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/common/Configuration.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/common/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/common/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/CustomersDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/CustomersDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/LoginDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/LoginDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/OrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/OrderDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/common/SQLQueries.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/common/SQLQueries.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/CustomerDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/CustomerDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/DBConnection.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/LoginDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/LoginDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImplCsv.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Customer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/MenuItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Order.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/errors/CustomerError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/errors/Error.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/errors/CustomerErrorEmptyList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/errors/OrderError.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/errors/OrderErrorEmptyList.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/OrderDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dao/impl/OrderItemsDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/impl/OrderItemsDaoImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/CustomerService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/LoginService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/LoginService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/services/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/common/ConstantsScreens.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/common/Screens.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/common/Screens.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/customers/AddCustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/customers/AddCustomerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/customers/DeleteCustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/customers/DeleteCustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/customers/UpdateCustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/customers/UpdateCustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/login/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/login/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/AddOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/AddOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/DeleteOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/DeleteOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/ShowOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/ShowOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/orders/UpdateOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/orders/UpdateOrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ui/screens/principal/PrincipalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ui/screens/principal/PrincipalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/customers/addCustomer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/customers/addCustomer.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/customers/deleteCustomer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/customers/deleteCustomer.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/customers/showCustomers.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/customers/showCustomers.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/customers/updateCustomer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/customers/updateCustomer.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/orders/addOrder.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/orders/addOrder.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/orders/deleteOrder.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/orders/deleteOrder.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/orders/showOrders.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/orders/showOrders.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/fxml/orders/updateOrder.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/fxml/orders/updateOrder.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mysql-properties.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mysql-properties.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -126,7 +87,7 @@
   <component name="RunManager">
     <configuration name="DIJavafx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ui.main.DIJavafx" />
-      <module name="SQLrestaurant_DavidRoldan" />
+      <module name="Multipantallas_AlvaroRdb" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="ui.main.*" />
@@ -195,7 +156,7 @@
       <workItem from="1698773393747" duration="5593000" />
       <workItem from="1698842790575" duration="25577000" />
       <workItem from="1698911516656" duration="15965000" />
-      <workItem from="1698964047609" duration="1691000" />
+      <workItem from="1698964047609" duration="8385000" />
     </task>
     <task id="LOCAL-00001" summary="Add y show funcionan">
       <option name="closed" value="true" />
@@ -205,7 +166,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697788478255</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Entrega JDBC">
+      <option name="closed" value="true" />
+      <created>1698965764331</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1698965764331</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

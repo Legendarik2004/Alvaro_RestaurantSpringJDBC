@@ -59,7 +59,8 @@ public class OrderDaoImpl implements OrderDAO {
             }
             either = Either.right(orders);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+
             either = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
         }
         return either;
@@ -83,14 +84,15 @@ public class OrderDaoImpl implements OrderDAO {
             preparedStatement.setInt(2, order.getCustomerId());
             preparedStatement.setInt(3, order.getTableId());
 
-            ResultSet rs = preparedStatement.getGeneratedKeys();
-            if (rs.next()){
-                addedOrderId = rs.getInt(1);
-            }
+
             int rowsAdded = preparedStatement.executeUpdate();
 
             if (rowsAdded > 0) {
-
+                ResultSet rs = preparedStatement.getGeneratedKeys();
+                if (rs.next()){
+                    addedOrderId = rs.getInt(1);
+                    System.out.println(addedOrderId);
+                }
                 result = Either.right(0);
             } else {
                 result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_ORDER));
@@ -109,10 +111,10 @@ public class OrderDaoImpl implements OrderDAO {
         try (Connection myConnection = db.getConnection();
 
              PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.UPDATE_ORDER)) {
-            preparedStatement.setInt(1, order.getOrderId());
-            preparedStatement.setTimestamp(2, order.getDate());
-            preparedStatement.setInt(3, order.getCustomerId());
-            preparedStatement.setInt(4, order.getTableId());
+
+
+            preparedStatement.setInt(1, order.getTableId());
+            preparedStatement.setInt(2, order.getOrderId());
 
             int rowsUpdated = preparedStatement.executeUpdate();
 

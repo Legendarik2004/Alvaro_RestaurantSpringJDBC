@@ -99,6 +99,7 @@ public class DeleteCustomerController extends BaseScreenController {
         }
     }
 
+    //TODO arreglar metodo
     public void deleteCustomer(ActionEvent actionEvent) {
         if (selectedCustomer == null) {
             getPrincipalController().showErrorAlert(Constants.SELECT_CUSTOMER_FIRST);
@@ -116,9 +117,7 @@ public class DeleteCustomerController extends BaseScreenController {
                                         getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_DELETED_SUCCESSFULLY);
                                     }
                                 })
-                                .peekLeft(customerError -> {
-                                    getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_CUSTOMER);
-                                });
+                                .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_CUSTOMER));
                     }
                 });
             } else {
@@ -128,9 +127,7 @@ public class DeleteCustomerController extends BaseScreenController {
                                 getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_DELETED_SUCCESSFULLY);
                             }
                         })
-                        .peekLeft(customerError -> {
-                            getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_CUSTOMER);
-                        });
+                        .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_CUSTOMER));
             }
         }
     }

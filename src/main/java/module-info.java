@@ -24,6 +24,7 @@ module javafx {
     exports ui.screens.welcome;
     exports model.errors;
     exports dao;
+    exports services;
 
     opens ui.screens.login;
     opens ui.screens.principal;

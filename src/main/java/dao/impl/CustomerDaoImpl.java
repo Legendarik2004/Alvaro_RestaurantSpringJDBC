@@ -60,7 +60,8 @@ public class CustomerDaoImpl implements CustomersDAO {
             }
             either = Either.right(customers);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+
             either = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
         }
         return either;

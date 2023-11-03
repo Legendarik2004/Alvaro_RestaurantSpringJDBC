@@ -9,6 +9,8 @@ public class Constants {
 
     //Login
     public static final String INCORRECT_USER_OR_PASSWORD = "Incorrect user or password";
+    public static final String ERROR_ADDING_CREDENTIALS = "Error adding credentials";
+    public static final String ERROR_ONLOGIN = "An error occurred during login";
 
 
     //Empty List Errors
@@ -51,8 +53,9 @@ public class Constants {
     public static final String SELECT_ORDER_FIRST = "To delete an order select it first";
 
 
-    public static final String ERROR_ADDING_CREDENTIALS = "Error adding credentials";
-    public static final String ERROR_ONLOGIN = "An error occurred during login";
+
+
+    //Variables
     public static final String ID = "id";
     public static final String FIRST_NAME = "first_name";
     public static final String LAST_NAME = "last_name";
@@ -60,4 +63,5 @@ public class Constants {
     public static final String PHONE = "phone";
     public static final String DATE_OF_BIRTH = "date_of_birth";
     public static final String PASSWORD = "password";
+
 }

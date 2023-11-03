@@ -8,8 +8,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Multipantallas_AlvaroRdb" />
-        <module name="SQLrestaurant_DavidRoldan" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="SQLrestaurant_DavidRoldan" target="20" />
+    </bytecodeTargetLevel>
   </component>
 </project>

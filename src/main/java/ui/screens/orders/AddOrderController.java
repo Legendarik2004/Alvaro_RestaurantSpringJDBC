@@ -12,7 +12,6 @@ import model.MenuItem;
 import model.Order;
 import model.OrderItem;
 import model.User;
-import services.CustomerService;
 import services.OrderItemsService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
@@ -26,7 +25,7 @@ public class AddOrderController extends BaseScreenController {
 
     private final OrderService orderService;
     private final OrderItemsService orderItemsService;
-    private final CustomerService customerService;
+
     @FXML
     public TableView<OrderItem> itemsTable;
     @FXML
@@ -45,10 +44,10 @@ public class AddOrderController extends BaseScreenController {
     private User actualUser;
 
     @Inject
-    public AddOrderController(OrderService orderService, OrderItemsService orderItemsService, CustomerService customerService) {
+    public AddOrderController(OrderService orderService, OrderItemsService orderItemsService) {
         this.orderService = orderService;
         this.orderItemsService = orderItemsService;
-        this.customerService = customerService;
+
     }
 
     public void initialize() throws IOException {
@@ -91,6 +90,7 @@ public class AddOrderController extends BaseScreenController {
 
                         if (success == 0) {
                             int id = orderService.getAddedOrderId();
+                            System.out.println(id);
                             List<OrderItem> orderItemList = itemsTable.getItems().stream().toList();
                             for (OrderItem orderItem : orderItemList) {
                                 orderItem.setOrderId(id);
@@ -101,10 +101,7 @@ public class AddOrderController extends BaseScreenController {
 
                         }
                     })
-                    .peekLeft(customerError -> {
-                        getPrincipalController().showErrorAlert(Constants.ERROR_ADDING_ORDER);
-
-                    });
+                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_ADDING_ORDER));
         }
     }
 
@@ -116,7 +113,7 @@ public class AddOrderController extends BaseScreenController {
             a.show();
         } else {
             MenuItem add = orderItemsService.getAllMenuItems().get().stream()
-                    .filter(menuItem -> menuItem.getName().equals(itemsComboBox.getValue().toString()))
+                    .filter(menuItem -> menuItem.getName().equals(itemsComboBox.getValue()))
                     .findFirst().orElse(null);
             if (add != null) {
                 itemsTable.getItems().add(new OrderItem(0, 0, add.getMenuItemId(), Integer.parseInt(quantityItemField.getText()), add));

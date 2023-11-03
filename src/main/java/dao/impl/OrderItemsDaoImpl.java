@@ -31,8 +31,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
         Either<Error, List<OrderItem>> result;
 
         try (Connection myConnection = db.getConnection();
-             PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.GETALL_ORDERITEMS);
-        ) {
+             PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.GETALL_ORDERITEMS)) {
             preparedStatement.setInt(1, id);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -62,7 +61,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
             }
             result = Either.right(orderItems);
         } catch (SQLException e) {
-            e.printStackTrace();
+            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
         }
         return result;
@@ -110,6 +109,25 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
 
     @Override
     public Either<Error, Integer> delete(OrderItem orderItem) {
-        return Either.right(0);
+        Either<Error, Integer> result;
+
+        try (Connection myConnection = db.getConnection();
+             PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.DELETE_ORDERITEM)) {
+
+            preparedStatement.setInt(1, orderItem.getOrderItemId());
+
+
+            int rowsAdded = preparedStatement.executeUpdate();
+
+            if (rowsAdded > 0) {
+                result = Either.right(0);
+            } else {
+                result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_ITEM));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_ITEM));
+        }
+        return result;
     }
 }

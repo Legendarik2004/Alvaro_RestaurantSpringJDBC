@@ -10,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import model.Customer;
 import model.Order;
 import model.OrderItem;
+import model.User;
 import services.CustomerService;
 import services.OrderItemsService;
 import services.OrderService;
@@ -51,6 +52,8 @@ public class ShowOrderController extends BaseScreenController {
     public TableView<OrderItem> itemsTable;
 
     private Order selectedOrder;
+    private User actualUser;
+
 
     @Inject
     public ShowOrderController(OrderService orderService, OrderItemsService orderItemsService, CustomerService customerService) {
@@ -69,7 +72,7 @@ public class ShowOrderController extends BaseScreenController {
         quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         ordersTable.setOnMouseClicked(this::handleTableClick);
 
-        filterComboBox.getItems().addAll("Default", "Date", "Customer");
+//        filterComboBox.getItems().addAll("Default", "Date", "Customer");
         customerOrderComboBox.getItems().addAll(customerService.getAll().get().stream().map(Customer::getId).toList());
 
         customerOrderComboBox.setVisible(false);
@@ -89,22 +92,36 @@ public class ShowOrderController extends BaseScreenController {
 
     @Override
     public void principalCargado() throws IOException {
+        actualUser = getPrincipalController().actualUser;
+
+        if (actualUser.getId() < 0) {
+            filterComboBox.getItems().addAll("Default", "Date", "Customer");
+            customernameLabel.setVisible(true);
+        } else {
+            filterComboBox.getItems().addAll("Default", "Date");
+            customernameLabel.setVisible(false);
+        }
         setOrderTable();
     }
 
     private void setOrderTable() {
         ordersTable.getItems().clear();
-        orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
-                .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
 
+        if (actualUser.getId() < 0) {
+            orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
+                    .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
+
+        } else {
+            orderService.get(actualUser.getId()).peek(orders -> ordersTable.getItems().addAll(orders))
+                    .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
+        }
     }
+
 
     private void setOrderItemTable() {
         if (selectedOrder != null) {
             orderItemsService.getAllOrderItems(selectedOrder.getOrderId())
-                    .peek(orderItems -> {
-                        itemsTable.getItems().setAll(orderItems);
-                    })
+                    .peek(orderItems -> itemsTable.getItems().setAll(orderItems))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
             customerService.get(selectedOrder.getCustomerId())
                     .peek(customer -> customernameLabel.setText(customer.toStringSimplified()))
@@ -116,7 +133,7 @@ public class ShowOrderController extends BaseScreenController {
 
     @FXML
     public void filter() {
-        String selectedFilter = filterComboBox.getValue().toString();
+        String selectedFilter = filterComboBox.getValue();
 
         if ("Date".equals(selectedFilter)) {
             dateField.setVisible(true);
@@ -158,7 +175,7 @@ public class ShowOrderController extends BaseScreenController {
                             .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
                 }
             });
-        } else if ("Default".equals(selectedFilter) || selectedFilter == null) {
+        } else {
             itemsTable.getItems().clear();
             setOrderTable();
         }

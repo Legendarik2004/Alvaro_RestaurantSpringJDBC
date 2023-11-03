@@ -19,6 +19,7 @@ import ui.screens.common.BaseScreenController;
 import java.io.IOException;
 import java.security.Timestamp;
 
+
 public class DeleteOrderController extends BaseScreenController {
     private final OrderService orderService;
     private final OrderItemsService orderItemsService;
@@ -87,9 +88,7 @@ public class DeleteOrderController extends BaseScreenController {
     private void setOrderItemTable() {
         if (selectedOrder != null) {
             orderItemsService.getAllOrderItems(selectedOrder.getOrderId())
-                    .peek(orderItems -> {
-                        itemsTable.getItems().setAll(orderItems);
-                    })
+                    .peek(orderItems -> itemsTable.getItems().setAll(orderItems))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
         } else {
             itemsTable.getItems().clear();
@@ -103,6 +102,10 @@ public class DeleteOrderController extends BaseScreenController {
             a.show();
         } else {
 
+            orderItemsService.getAllOrderItems(selectedOrder.getOrderId())
+                    .peek(orderItemsList -> orderItemsList.forEach(orderItemsService::delete))
+                    .peekLeft(noItems -> itemsTable.getItems().clear());
+
             orderService.delete(selectedOrder).peek(success -> {
                         if (success == 0) {
                             setOrderTable();
@@ -110,9 +113,6 @@ public class DeleteOrderController extends BaseScreenController {
                         }
                     })
                     .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_ORDER));
-
-
-
         }
     }
 }

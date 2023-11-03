@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import model.MenuItem;
 import model.Order;
 import model.OrderItem;
+import model.User;
 import services.OrderItemsService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
@@ -50,6 +51,7 @@ public class UpdateOrderController extends BaseScreenController {
     public ComboBox<String> itemsComboBox;
     public Order selectedOrder;
     private OrderItem selectedOrderItem;
+    private User actualUser;
 
     @Inject
     public UpdateOrderController(OrderService orderService, OrderItemsService orderItemsService) {
@@ -81,7 +83,6 @@ public class UpdateOrderController extends BaseScreenController {
                 tableOrderField.setText(String.valueOf(selectedOrder.getTableId()));
                 customerOrderField.setText(String.valueOf(selectedOrder.getCustomerId()));
                 dateField.setValue(selectedOrder.getDate().toLocalDateTime().toLocalDate());
-                //this.selectedOrderItem = itemsTable.getSelectionModel().getSelectedItem();
             }
         }
         setOrderItemTable();
@@ -95,35 +96,42 @@ public class UpdateOrderController extends BaseScreenController {
 
             }
         }
-        //setOrderItemTable();
+
     }
 
     @Override
     public void principalCargado() throws IOException {
+        actualUser = getPrincipalController().actualUser;
         setTables();
     }
 
     private void setTables() {
         ordersTable.getItems().clear();
-        orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
-                .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
+        if (actualUser.getId() < 0) {
+            orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
+                    .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
+
+        } else {
+            orderService.get(actualUser.getId()).peek(orders -> ordersTable.getItems().addAll(orders))
+                    .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
+        }
         itemsTable.getItems().clear();
+        itemsComboBox.setDisable(true);
     }
 
     private void setOrderItemTable() {
         if (selectedOrder != null) {
             orderItemsService.getAllOrderItems(selectedOrder.getOrderId())
-                    .peek(orderItems -> {
-                        itemsTable.getItems().setAll(orderItems);
-                    })
+                    .peek(orderItems -> itemsTable.getItems().setAll(orderItems))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
+            itemsComboBox.setDisable(false);
         } else {
             itemsTable.getItems().clear();
         }
     }
-
+//TODO añadir orderItems en database
     public void updateOrder(ActionEvent actionEvent) {
-        if (tableOrderField.getText().isEmpty() || customerOrderField.getText().isEmpty() || dateField.getValue() == null) {
+        if (tableOrderField.getText().isEmpty()) {
             Alert a = new Alert(Alert.AlertType.ERROR);
             a.setContentText(Constants.EMPTY_FIELD);
             a.show();
@@ -131,14 +139,11 @@ public class UpdateOrderController extends BaseScreenController {
             orderService.update(new Order(selectedOrder.getOrderId(), Timestamp.from(Instant.now()), Integer.parseInt(customerOrderField.getText()), Integer.parseInt(tableOrderField.getText()))).peek(success -> {
                         if (success == 0) {
                             setTables();
-                            getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_UPDATED_SUCCESSFULLY);
+                            getPrincipalController().showConfirmationAlert(Constants.ORDER_UPDATED_SUCCESSFULLY);
 
                         }
                     })
-                    .peekLeft(customerError -> {
-                        getPrincipalController().showErrorAlert(Constants.ERROR_UPDATING_CUSTOMER);
-
-                    });
+                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_UPDATING_ORDER));
         }
     }
 
@@ -153,7 +158,7 @@ public class UpdateOrderController extends BaseScreenController {
                 a.show();
             } else {
                 MenuItem add = orderItemsService.getAllMenuItems().get().stream()
-                        .filter(menuItem -> menuItem.getName().equals(itemsComboBox.getValue().toString()))
+                        .filter(menuItem -> menuItem.getName().equals(itemsComboBox.getValue()))
                         .findFirst().orElse(null);
                 if (add != null) {
                     itemsTable.getItems().add(new OrderItem(0, selectedOrder.getOrderId(), add.getMenuItemId(), Integer.parseInt(quantityItemField.getText()), add));

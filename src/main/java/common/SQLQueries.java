@@ -16,14 +16,12 @@ public class SQLQueries {
     //ORDERS
     public static final String GETALL_ORDERS = "SELECT * FROM orders";
     public static final String ADD_ORDER = "INSERT INTO orders (order_date, customer_id, table_id) VALUES ( ?, ?, ?)";
-    public static final String UPDATE_ORDER = "UPDATE orders SET order_id = ?, order_date = ?, customer_id = ?, table_id = ? WHERE id = ?";
+    public static final String UPDATE_ORDER = "UPDATE orders SET table_id = ? WHERE order_id = ?";
     public static final String DELETE_ORDER = "DELETE FROM orders WHERE order_id = ?";
 
     //ORDERITEMS
     public static final String GETALL_ORDERITEMS = "SELECT oi.order_item_id, oi.order_id, oi.menu_item_id, oi.quantity, mi.name, mi.description, mi.price FROM order_items oi INNER JOIN menu_items mi ON oi.menu_item_id = mi.menu_item_id WHERE oi.order_id = ?";
     public static final String ADD_ORDERITEM = "INSERT INTO order_items (order_id, menu_item_id, quantity) VALUES ( ?, ?, ?)";
     public static final String DELETE_ORDERITEM = "DELETE FROM order_items WHERE order_item_id = ?";
-
-
 
 }

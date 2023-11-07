@@ -21,6 +21,7 @@ import java.time.Instant;
 
 public class UpdateOrderController extends BaseScreenController {
 
+    public static final String MENU_ITEMS = "Menu items";
     private final OrderService orderService;
     private final OrderItemService orderItemService;
     @FXML
@@ -112,7 +113,7 @@ public class UpdateOrderController extends BaseScreenController {
                     .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
 
         } else {
-            orderService.get(actualUser.getId()).peek(orders -> ordersTable.getItems().addAll(orders))
+            orderService.getOrderOfCustomer(actualUser.getId()).peek(orders -> ordersTable.getItems().addAll(orders))
                     .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
         }
         itemsTable.getItems().clear();
@@ -130,15 +131,21 @@ public class UpdateOrderController extends BaseScreenController {
         }
     }
 
-    //TODO añadir orderItems en database
     public void updateOrder() {
         if (tableOrderField.getText().isEmpty()) {
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(Constants.EMPTY_FIELD);
-            a.show();
+            getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
         } else {
-            orderService.update(new Order(selectedOrder.getOrderId(), Timestamp.from(Instant.now()), Integer.parseInt(customerOrderField.getText()), Integer.parseInt(tableOrderField.getText()))).peek(success -> {
+            orderService.update(new Order(selectedOrder.getOrderId(), Timestamp.from(Instant.now()), 0, Integer.parseInt(tableOrderField.getText()))).peek(success -> {
                         if (success == 0) {
+
+                            orderItemService.getAllOrderItems(selectedOrder.getOrderId())
+                                    .peek(orderItemsList -> orderItemsList.forEach(orderItemService::delete))
+                                    .peekLeft(noItems -> itemsTable.getItems().clear());
+
+                            for (OrderItem orderItem : itemsTable.getItems().stream().toList()) {
+                                orderItem.setOrderId(selectedOrder.getOrderId());
+                                orderItemService.save(orderItem);
+                            }
                             setTables();
                             getPrincipalController().showConfirmationAlert(Constants.ORDER_UPDATED_SUCCESSFULLY);
 
@@ -153,10 +160,8 @@ public class UpdateOrderController extends BaseScreenController {
         if (selectedOrder == null) {
             getPrincipalController().showErrorAlert(Constants.SELECT_ORDER_FIRST);
         } else {
-            if (quantityItemField.getText().isEmpty() || itemsComboBox.getValue().equals("Menu items")) {
-                Alert a = new Alert(Alert.AlertType.ERROR);
-                a.setContentText(Constants.EMPTY_FIELD);
-                a.show();
+            if (quantityItemField.getText().isEmpty() || itemsComboBox.getValue().equals(MENU_ITEMS)) {
+                getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
             } else {
                 MenuItem add = orderItemService.getAllMenuItems().get().stream()
                         .filter(menuItem -> menuItem.getName().equals(itemsComboBox.getValue()))

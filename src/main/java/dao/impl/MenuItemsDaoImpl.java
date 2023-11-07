@@ -32,7 +32,7 @@ public class MenuItemsDaoImpl implements MenuItemsDAO {
         Either<Error, List<MenuItem>> result;
 
         try (Connection myConnection = db.getConnection();
-             PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.QUERY)
+             PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.GETALL_MENUITEMS)
         ) {
 
 
@@ -40,7 +40,7 @@ public class MenuItemsDaoImpl implements MenuItemsDAO {
             result = Either.right(readRS(rs).get());
         } catch (SQLException e) {
             Logger.getLogger(MenuItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_MENU_ITEMS_FOUND));
         }
         return result;
     }
@@ -50,17 +50,17 @@ public class MenuItemsDaoImpl implements MenuItemsDAO {
         try {
             List<MenuItem> menuItems = new ArrayList<>();
             while (rs.next()) {
-                int menuItemId = rs.getInt("menu_item_id");
-                String name = rs.getString("name");
-                String description = rs.getString("description");
-                double price = rs.getDouble("price");
+                int menuItemId = rs.getInt(Constants.MENU_ITEM_ID);
+                String name = rs.getString(Constants.NAME);
+                String description = rs.getString(Constants.DESCRIPTION);
+                double price = rs.getDouble(Constants.PRICE);
                 MenuItem menuItem = new MenuItem(menuItemId, name, description, price);
                 menuItems.add(menuItem);
             }
             result = Either.right(menuItems);
         } catch (SQLException e) {
             Logger.getLogger(MenuItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_MENU_ITEMS_FOUND));
         }
         return result;
     }

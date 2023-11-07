@@ -9,7 +9,7 @@ import java.util.List;
 public interface OrderService {
     Either<Error, List<Order>> getAll();
 
-    Either<Error, List<Order>> get(int id);
+    Either<Error, List<Order>> getOrderOfCustomer(int id);
 
     Either<Error, Integer> save(Order o);
 

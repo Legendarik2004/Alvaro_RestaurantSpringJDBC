@@ -22,7 +22,7 @@ import java.io.IOException;
 @Data
 @Log4j2
 public class PrincipalController {
-    private final Alert alert;
+    private Alert alert;
     private User actualUser;
     @FXML
     public BorderPane root;

@@ -24,7 +24,7 @@ public class OrderItemsServiceImpl implements OrderItemService {
 
     @Override
     public Either<Error, List<OrderItem>> getAllOrderItems(int id) {
-        return dao.getAll(id);
+        return dao.getAllOrderItems(id);
     }
 
     @Override

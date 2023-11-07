@@ -87,9 +87,7 @@ public class UpdateCustomerController extends BaseScreenController {
 
     public void updateCustomer() {
         if (fnameField.getText().isEmpty() || lnameField.getText().isEmpty() || emailField.getText().isEmpty() || phoneField.getText().isEmpty() || dobField.getValue() == null) {
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(Constants.EMPTY_FIELD);
-            a.show();
+            getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
         } else {
             customerService.update(new Customer(selectedCustomer.getId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue())).peek(success -> {
                         if (success == 0) {

@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 
 @Log4j2
 public class LoginDaoImpl implements LoginDAO {
-    public static final String USER_NAME = "user_name";
     private final DBConnectionPool db;
     private User newUser;
 
@@ -39,17 +38,17 @@ public class LoginDaoImpl implements LoginDAO {
                 if (rs.next()) {
                     newUser = new User(
                             rs.getInt(Constants.ID),
-                            rs.getString(USER_NAME),
+                            rs.getString(Constants.USER_NAME),
                             rs.getString(Constants.PASSWORD)
                     );
                     result = Either.right(true);
                 } else {
-                    result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ONLOGIN));
+                    result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ON_LOGIN));
                 }
             }
         } catch (SQLException e) {
-            Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ONLOGIN));
+            Logger.getLogger(LoginDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ON_LOGIN));
         }
         return result;
     }

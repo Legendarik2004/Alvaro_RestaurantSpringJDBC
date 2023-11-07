@@ -4,7 +4,6 @@ import common.Constants;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -96,9 +95,7 @@ public class DeleteOrderController extends BaseScreenController {
 
     public void deleteOrder() {
         if (selectedOrder == null) {
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(Constants.SELECT_ORDER_FIRST);
-            a.show();
+            getPrincipalController().showErrorAlert(Constants.SELECT_ORDER_FIRST);
         } else {
 
             orderItemService.getAllOrderItems(selectedOrder.getOrderId())

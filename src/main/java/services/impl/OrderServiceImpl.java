@@ -24,8 +24,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Either<Error, List<Order>> get(int id) {
-        return dao.get(id);
+    public Either<Error, List<Order>> getOrderOfCustomer(int id) {
+        return dao.getOrderOfCustomer(id);
     }
 
     @Override

@@ -66,9 +66,7 @@ public class AddCustomerController extends BaseScreenController {
 
     public void addCustomer() {
         if (fnameField.getText().isEmpty() || lnameField.getText().isEmpty() || emailField.getText().isEmpty() || phoneField.getText().isEmpty() || dobField.getValue() == null) {
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(Constants.EMPTY_FIELD);
-            a.show();
+            getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
         } else {
             int idMayor = customerService.getAll().get().stream().mapToInt(Customer::getId).max().getAsInt();
             idMayor++;

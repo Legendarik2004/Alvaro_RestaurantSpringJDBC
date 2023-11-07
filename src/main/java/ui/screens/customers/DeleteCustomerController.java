@@ -3,8 +3,6 @@ package ui.screens.customers;
 import common.Constants;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -13,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import model.Customer;
 import model.Order;
 import services.CustomerService;
+import services.OrderItemService;
 import services.OrderService;
 import ui.screens.common.BaseScreenController;
 
@@ -21,8 +20,10 @@ import java.security.Timestamp;
 import java.time.LocalDate;
 
 public class DeleteCustomerController extends BaseScreenController {
+    public static final String SEGURO_QUE_QUIERES_ELIMINAR = "¿Seguro que quieres eliminar?";
     private final CustomerService customerService;
     private final OrderService orderService;
+    private final OrderItemService orderItemService;
     @FXML
     public TableView<Customer> customersTable;
     @FXML
@@ -50,9 +51,10 @@ public class DeleteCustomerController extends BaseScreenController {
     private Customer selectedCustomer;
 
     @Inject
-    public DeleteCustomerController(CustomerService customerService, OrderService orderService) {
+    public DeleteCustomerController(CustomerService customerService, OrderService orderService, OrderItemService orderItemService) {
         this.customerService = customerService;
         this.orderService = orderService;
+        this.orderItemService = orderItemService;
     }
 
     public void initialize() {
@@ -94,40 +96,48 @@ public class DeleteCustomerController extends BaseScreenController {
     private void setOrderTable() {
         ordersTable.getItems().clear();
         if (selectedCustomer != null) {
-            ordersTable.getItems().addAll(orderService.get(selectedCustomer.getId()).get());
+            ordersTable.getItems().addAll(orderService.getOrderOfCustomer(selectedCustomer.getId()).get());
         }
     }
 
-    //TODO arreglar metodo
-    public void deleteCustomer() {
+    public void deleteCustomerOrder() {
         if (selectedCustomer == null) {
             getPrincipalController().showErrorAlert(Constants.SELECT_CUSTOMER_FIRST);
         } else {
             if (!ordersTable.getItems().isEmpty()) {
-                // Mostrar un diálogo de confirmación antes de eliminar si hay orders en la tabla
-                Alert a = new Alert(AlertType.CONFIRMATION);
-                a.setContentText("¿Seguro que quieres eliminar?");
-
-                a.showAndWait().ifPresent(response -> {
+                getPrincipalController().showConfirmationAlert(SEGURO_QUE_QUIERES_ELIMINAR);
+                getPrincipalController().getAlert().showAndWait().ifPresent(response -> {
                     if (response == ButtonType.OK) {
-                        customerService.delete(selectedCustomer).peek(success -> {
-                                    if (success == 0) {
-                                        setCustomerTable();
-                                        getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_DELETED_SUCCESSFULLY);
-                                    }
-                                })
-                                .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_CUSTOMER));
+                        orderService.getOrderOfCustomer(selectedCustomer.getId()).peek(orders -> orders.forEach(
+                                order -> orderItemService.getAllOrderItems(order.getOrderId())
+                                        .peek(orderItemsList -> {
+                                            orderItemsList.forEach(orderItemService::delete);
+                                            orderService.delete(order).peek(orderDeleted -> {
+                                                if (orderDeleted == 0) {
+                                                    deleteCustomer(true);}
+                                            });
+                                        })
+                        ));
                     }
                 });
             } else {
-                customerService.delete(selectedCustomer).peek(success -> {
-                            if (success == 0) {
-                                setCustomerTable();
-                                getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_DELETED_SUCCESSFULLY);
-                            }
-                        })
-                        .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_CUSTOMER));
+                deleteCustomer(false);
             }
         }
     }
+
+    public void deleteCustomer(boolean hayOrders) {
+
+        customerService.delete(selectedCustomer).peek(success -> {
+                    if (success == 0) {
+                        setCustomerTable();
+                        if (hayOrders){
+                            setOrderTable();
+                        }
+                        getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_DELETED_SUCCESSFULLY);
+                    }
+                })
+                .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_CUSTOMER));
+    }
+
 }

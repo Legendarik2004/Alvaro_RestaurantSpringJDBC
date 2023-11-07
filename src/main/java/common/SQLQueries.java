@@ -1,7 +1,7 @@
 package common;
 
 public class SQLQueries {
-    public static final String QUERY = "SELECT * FROM menu_items";
+
 
     private SQLQueries() {
     }
@@ -9,6 +9,7 @@ public class SQLQueries {
     //CREDENTIALS
     public static final String ADD_CREDENTIALS = "INSERT INTO credentials (user_name, password) VALUES (?, ?)";
     public static final String CHECK_CREDENTIALS = "SELECT * FROM credentials WHERE user_name = ?";
+    public static final String DELETE_CREDENTIALS = "DELETE FROM credentials WHERE id = ?";
 
 
     //CUSTOMER
@@ -28,4 +29,6 @@ public class SQLQueries {
     public static final String ADD_ORDERITEM = "INSERT INTO order_items (order_id, menu_item_id, quantity) VALUES ( ?, ?, ?)";
     public static final String DELETE_ORDERITEM = "DELETE FROM order_items WHERE order_item_id = ?";
 
+    //MENUITEMS
+    public static final String GETALL_MENUITEMS = "SELECT * FROM menu_items";
 }

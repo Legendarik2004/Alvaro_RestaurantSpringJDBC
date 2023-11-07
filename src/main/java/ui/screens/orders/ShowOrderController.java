@@ -112,7 +112,7 @@ public class ShowOrderController extends BaseScreenController {
                     .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
 
         } else {
-            orderService.get(actualUser.getId()).peek(orders -> ordersTable.getItems().addAll(orders))
+            orderService.getOrderOfCustomer(actualUser.getId()).peek(orders -> ordersTable.getItems().addAll(orders))
                     .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
         }
     }
@@ -123,7 +123,7 @@ public class ShowOrderController extends BaseScreenController {
             orderItemService.getAllOrderItems(selectedOrder.getOrderId())
                     .peek(orderItems -> itemsTable.getItems().setAll(orderItems))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
-            customerService.get(selectedOrder.getCustomerId())
+            customerService.getCustomerById(selectedOrder.getCustomerId())
                     .peek(customer -> customernameLabel.setText(customer.toStringSimplified()))
                     .peekLeft(noCustomer -> customernameLabel.setText(noCustomer.getMessage()));
         } else {

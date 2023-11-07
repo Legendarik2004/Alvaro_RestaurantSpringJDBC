@@ -38,7 +38,7 @@ public class CustomerDaoImpl implements CustomersDAO {
             result = Either.right(readRSGetAll(rs).get());
         } catch (SQLException e) {
             Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_CUSTOMERS_FOUND));
         }
         return result;
     }
@@ -62,13 +62,13 @@ public class CustomerDaoImpl implements CustomersDAO {
         } catch (SQLException e) {
             Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
 
-            either = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
+            either = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_CUSTOMERS_FOUND));
         }
         return either;
     }
 
     @Override
-    public Either<Error, Customer> get(int id) {
+    public Either<Error, Customer> getCustomerById(int id) {
         List<Customer> customersList = getAll().get();
         Either<Error, Customer> result;
         try {
@@ -76,11 +76,11 @@ public class CustomerDaoImpl implements CustomersDAO {
             if (customer != null) {
                 result = Either.right(customer);
             } else {
-                result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
+                result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_CUSTOMER_FOUND));
             }
         } catch (Exception e) {
             log.error(e.getMessage());
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_CUSTOMER_FOUND));
         }
         return result;
     }
@@ -181,7 +181,9 @@ public class CustomerDaoImpl implements CustomersDAO {
             int rowsDeleted = preparedStatement.executeUpdate();
 
             if (rowsDeleted > 0) {
-                result = Either.right(0);
+
+                result = deleteCredential(myConnection, customer);
+
             } else {
                 result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_DELETING_CUSTOMER));
             }
@@ -191,4 +193,25 @@ public class CustomerDaoImpl implements CustomersDAO {
         }
         return result;
     }
+
+    public Either<Error, Integer> deleteCredential(Connection myConnection, Customer customer) {
+        Either<Error, Integer> result;
+        try (PreparedStatement preparedStatementCredentials = myConnection.prepareStatement(SQLQueries.DELETE_CREDENTIALS)) {
+            preparedStatementCredentials.setInt(1, customer.getId());
+
+            int rowsDeletedCredentials = preparedStatementCredentials.executeUpdate();
+
+            if (rowsDeletedCredentials > 0) {
+                result = Either.right(0);
+            } else {
+                result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_DELETING_CREDENTIALS));
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_DELETING_CREDENTIALS));
+        }
+
+        return result;
+    }
+
 }

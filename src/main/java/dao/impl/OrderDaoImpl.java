@@ -40,7 +40,7 @@ public class OrderDaoImpl implements OrderDAO {
             result = Either.right(readRS(rs).get());
         } catch (SQLException e) {
             Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_ORDERS_FOUND));
         }
         return result;
     }
@@ -51,23 +51,23 @@ public class OrderDaoImpl implements OrderDAO {
             List<Order> orders = new ArrayList<>();
             while (rs.next()) {
                 Order resultOrder = new Order(
-                        rs.getInt("order_id"),
-                        rs.getTimestamp("order_date"),
-                        rs.getInt("customer_id"),
-                        rs.getInt("table_id"));
+                        rs.getInt(Constants.ORDER_ID),
+                        rs.getTimestamp(Constants.ORDER_DATE),
+                        rs.getInt(Constants.CUSTOMER_ID),
+                        rs.getInt(Constants.TABLE_ID));
                 orders.add(resultOrder);
             }
             either = Either.right(orders);
         } catch (SQLException e) {
             Logger.getLogger(OrderDaoImpl.class.getName()).log(Level.SEVERE, null, e);
 
-            either = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
+            either = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_ORDERS_FOUND));
         }
         return either;
     }
 
     @Override
-    public Either<Error, List<Order>> get(int id) {
+    public Either<Error, List<Order>> getOrderOfCustomer(int id) {
 
         return Either.right(getAll().get().stream().filter(order -> order.getCustomerId() == id).toList());
     }

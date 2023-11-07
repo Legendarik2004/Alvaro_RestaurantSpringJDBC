@@ -26,7 +26,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
     }
 
     @Override
-    public Either<Error, List<OrderItem>> getAll(int id) {
+    public Either<Error, List<OrderItem>> getAllOrderItems(int id) {
         Either<Error, List<OrderItem>> result;
 
         try (Connection myConnection = db.getConnection();
@@ -37,7 +37,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
             result = Either.right(readRS(rs).get());
         } catch (SQLException e) {
             Logger.getLogger(OrderItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_ORDER_ITEMS_FOUND));
         }
         return result;
     }
@@ -48,20 +48,20 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
         try {
             List<OrderItem> orderItems = new ArrayList<>();
             while (rs.next()) {
-                int orderItemId = rs.getInt("order_item_id");
-                int orderId = rs.getInt("order_id");
-                int menuItemId = rs.getInt("menu_item_id");
-                int quantity = rs.getInt("quantity");
-                String name = rs.getString("name");
-                String description = rs.getString("description");
-                double price = rs.getDouble("price");
+                int orderItemId = rs.getInt(Constants.ORDER_ITEM_ID);
+                int orderId = rs.getInt(Constants.ORDER_ID);
+                int menuItemId = rs.getInt(Constants.MENU_ITEM_ID);
+                int quantity = rs.getInt(Constants.QUANTITY);
+                String name = rs.getString(Constants.NAME);
+                String description = rs.getString(Constants.DESCRIPTION);
+                double price = rs.getDouble(Constants.PRICE);
 
                 orderItems.add(new OrderItem(orderItemId, orderId, menuItemId, quantity, new MenuItem(menuItemId, name, description, price)));
             }
             result = Either.right(orderItems);
         } catch (SQLException e) {
             Logger.getLogger(OrderItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR));
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_ORDER_ITEMS_FOUND));
         }
         return result;
     }
@@ -70,7 +70,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
     @Override
     public Either<Error, List<OrderItem>> get(int id) {
         Either<Error, List<OrderItem>> result;
-        result = Either.right(getAll(id).get().stream().filter(orderItem -> orderItem.getOrderId() == id).toList());
+        result = Either.right(getAllOrderItems(id).get().stream().filter(orderItem -> orderItem.getOrderId() == id).toList());
         return result;
     }
 
@@ -103,6 +103,13 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
 
     @Override
     public Either<Error, Integer> update(OrderItem orderItem) {
+        getAllOrderItems(orderItem.getOrderId());
+
+
+
+
+
+
         return Either.right(0);
     }
 

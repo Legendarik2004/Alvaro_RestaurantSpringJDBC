@@ -80,11 +80,8 @@ public class AddOrderController extends BaseScreenController {
     public void addOrder() {
 
         if (tableOrderField.getText().isEmpty()) {
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(Constants.EMPTY_FIELD);
-            a.show();
+            getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
         } else {
-
             orderService.save(new Order(0, Timestamp.from(Instant.now()), actualUser.getId(), Integer.parseInt(tableOrderField.getText()))).peek(success -> {
 
                         if (success == 0) {
@@ -106,9 +103,7 @@ public class AddOrderController extends BaseScreenController {
     @FXML
     public void addItem() {
         if (quantityItemField.getText().isEmpty() || itemsComboBox.getValue().equals("Menu items")) {
-            Alert a = new Alert(Alert.AlertType.ERROR);
-            a.setContentText(Constants.EMPTY_FIELD);
-            a.show();
+            getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
         } else {
             MenuItem add = orderItemService.getAllMenuItems().get().stream()
                     .filter(menuItem -> menuItem.getName().equals(itemsComboBox.getValue()))

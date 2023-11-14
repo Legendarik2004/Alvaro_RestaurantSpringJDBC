@@ -13,6 +13,9 @@ module javafx {
     requires jakarta.xml.bind;
     requires java.sql;
     requires commons.dbcp2;
+    requires spring.tx;
+    requires spring.jdbc;
+
     exports ui.main to javafx.graphics;
     exports ui.screens.principal;
     exports ui.screens.login;
@@ -26,6 +29,7 @@ module javafx {
     exports dao;
     exports services;
     exports common;
+    exports services.impl;
 
     opens ui.screens.login;
     opens ui.screens.principal;
@@ -37,6 +41,5 @@ module javafx {
     opens common;
     opens dao.impl;
     opens dao;
-    exports services.impl;
     opens services.impl;
 }

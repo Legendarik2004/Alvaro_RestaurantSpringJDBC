@@ -9,7 +9,7 @@ import java.util.List;
 public interface CustomerService {
     Either<Error, List<Customer>> getAll();
 
-    Either<Error, Customer> getCustomerById(int id);
+    Either<Error, Customer> get(int id);
 
     Either<Error, Integer> save(Customer c);
 

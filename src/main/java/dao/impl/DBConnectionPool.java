@@ -42,6 +42,10 @@ public class DBConnectionPool {
         return new HikariDataSource(hikariConfig);
     }
 
+    public DataSource getDataSource() {
+        return hikariDataSource;
+    }
+
     public Connection getConnection() {
         Connection con = null;
         try {

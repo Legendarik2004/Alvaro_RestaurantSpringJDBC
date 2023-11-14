@@ -3,8 +3,12 @@ package ui.screens.customers;
 import common.Constants;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import model.Credentials;
 import model.Customer;
 import services.CustomerService;
 import ui.screens.common.BaseScreenController;
@@ -28,6 +32,11 @@ public class AddCustomerController extends BaseScreenController {
     public TableColumn<String, Customer> phoneCustomerColumn;
     @FXML
     public TableColumn<LocalDate, Customer> dobCustomerColumn;
+
+    @FXML
+    public TextField userNameField;
+    @FXML
+    public TextField passwordField;
     @FXML
     public TextField fnameField;
     @FXML
@@ -65,16 +74,14 @@ public class AddCustomerController extends BaseScreenController {
     }
 
     public void addCustomer() {
-        if (fnameField.getText().isEmpty() || lnameField.getText().isEmpty() || emailField.getText().isEmpty() || phoneField.getText().isEmpty() || dobField.getValue() == null) {
+        if (fnameField.getText().isEmpty() || lnameField.getText().isEmpty() || emailField.getText().isEmpty() || phoneField.getText().isEmpty() || dobField.getValue() == null || userNameField.getText().isEmpty() || passwordField.getText().isEmpty()) {
             getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
         } else {
-            int idMayor = customerService.getAll().get().stream().mapToInt(Customer::getId).max().getAsInt();
-            idMayor++;
-            customerService.save(new Customer(idMayor, fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue())).peek(success -> {
+
+            customerService.save(new Customer(0, fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue(),new Credentials(0,userNameField.getText(),passwordField.getText()))).peek(success -> {
                         if (success == 0) {
 
                             setTable();
-
                             getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_ADDED_SUCCESSFULLY);
 
                         }

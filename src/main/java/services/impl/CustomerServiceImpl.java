@@ -24,12 +24,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Either<Error, Customer> getCustomerById(int id) {
-        return dao.getCustomerById(id);
+    public Either<Error, Customer> get(int id) {
+        return dao.get(id);
     }
 
     @Override
-    public Either<Error, Integer> save(Customer c) {
+    public Either<Error, Integer> save(Customer c){
         return dao.save(c);
     }
 

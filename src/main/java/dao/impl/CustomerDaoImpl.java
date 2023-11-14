@@ -8,9 +8,13 @@ import jakarta.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import model.Customer;
 import model.errors.Error;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,48 +31,20 @@ public class CustomerDaoImpl implements CustomersDAO {
     @Override
     public Either<Error, List<Customer>> getAll() {
 
+        JdbcTemplate jtm = new JdbcTemplate(db.getDataSource());
         Either<Error, List<Customer>> result;
 
-        try (Connection myConnection = db.getConnection();
-             Statement statement = myConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-                     ResultSet.CONCUR_READ_ONLY)) {
-            ResultSet rs = statement.executeQuery(SQLQueries.GETALL_CUSTOMERS);
-
-
-            result = Either.right(readRSGetAll(rs).get());
-        } catch (SQLException e) {
-            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+        try {
+            result = Either.right(jtm.query(SQLQueries.GETALL_CUSTOMERS, new CustomerMapper()));
+        } catch (Exception e) {
+            log.error(e.getMessage());
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_CUSTOMERS_FOUND));
         }
         return result;
     }
 
-    private Either<Error, List<Customer>> readRSGetAll(ResultSet rs) {
-        Either<Error, List<Customer>> either;
-        try {
-            List<Customer> customers = new ArrayList<>();
-            while (rs.next()) {
-                Customer resultCustomer = new Customer(
-                        rs.getInt(Constants.ID),
-                        rs.getString(Constants.FIRST_NAME),
-                        rs.getString(Constants.LAST_NAME),
-                        rs.getString(Constants.EMAIL),
-                        rs.getString(Constants.PHONE),
-                        rs.getDate(Constants.DATE_OF_BIRTH).toLocalDate()
-                );
-                customers.add(resultCustomer);
-            }
-            either = Either.right(customers);
-        } catch (SQLException e) {
-            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-
-            either = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_CUSTOMERS_FOUND));
-        }
-        return either;
-    }
-
     @Override
-    public Either<Error, Customer> getCustomerById(int id) {
+    public Either<Error, Customer> get(int id) {
         List<Customer> customersList = getAll().get();
         Either<Error, Customer> result;
         try {
@@ -88,81 +64,70 @@ public class CustomerDaoImpl implements CustomersDAO {
     @Override
     public Either<Error, Integer> save(Customer customer) {
         Either<Error, Integer> result;
+        JdbcTemplate jtm = new JdbcTemplate(db.getDataSource());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        try {
+            int credentialsAdded = jtm.update(
+                    new PreparedStatementCreator() {
+                        public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+                            PreparedStatement preparedStatement = connection.prepareStatement(SQLQueries.ADD_CREDENTIALS, Statement.RETURN_GENERATED_KEYS);
+                            preparedStatement.setString(1, customer.getCredentials().getUsername());
+                            preparedStatement.setString(2, customer.getCredentials().getPassword());
+                            return preparedStatement;
+                        }
+                    },
+                    keyHolder
+            );
 
-        try (Connection myConnection = db.getConnection();
-             PreparedStatement preparedStatementCredentials = myConnection.prepareStatement(SQLQueries.ADD_CREDENTIALS, Statement.RETURN_GENERATED_KEYS)) {
+            if (credentialsAdded > 0) {
+                Number generatedCredentialId = keyHolder.getKey();
 
-            preparedStatementCredentials.setString(1, customer.getFirstName());
-            preparedStatementCredentials.setString(2, customer.getFirstName().toLowerCase());
+                if (generatedCredentialId != null) {
+                    int customerId = generatedCredentialId.intValue();
 
-            int credentialsAdded = preparedStatementCredentials.executeUpdate();
-            if (credentialsAdded == 0) {
-                result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CREDENTIALS));
-            } else {
-                ResultSet generatedKeys = preparedStatementCredentials.getGeneratedKeys();
+                    int customerAdded = jtm.update(
+                            SQLQueries.ADD_CUSTOMER,
+                            customerId,
+                            customer.getFirstName(),
+                            customer.getLastName(),
+                            customer.getEmail(),
+                            customer.getPhone(),
+                            Date.valueOf(customer.getDob())
+                    );
 
-
-                if (generatedKeys.next()) {
-                    result = readRSSave(generatedKeys, myConnection, customer);
+                    if (customerAdded > 0) {
+                        result = Either.right(customerId);
+                    } else {
+                        result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
+                    }
                 } else {
-                    result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
+                    result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CREDENTIALS));
                 }
+            } else {
+                result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CREDENTIALS));
             }
-        } catch (SQLException e) {
+        } catch (DataAccessException e) {
             Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CREDENTIALS));
         }
-        return result;
-    }
 
-    public Either<Error, Integer> readRSSave(ResultSet generatedKeys, Connection myConnection, Customer customer) {
-        Either<Error, Integer> result;
-
-        try (PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.ADD_CUSTOMER)) {
-            preparedStatement.setInt(1, generatedKeys.getInt(1));
-            preparedStatement.setString(2, customer.getFirstName());
-            preparedStatement.setString(3, customer.getLastName());
-            preparedStatement.setString(4, customer.getEmail());
-            preparedStatement.setString(5, customer.getPhone());
-            preparedStatement.setDate(6, Date.valueOf(customer.getDob()));
-
-            int rowsAdded = preparedStatement.executeUpdate();
-
-            if (rowsAdded > 0) {
-                result = Either.right(0);
-            } else {
-                result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_CUSTOMER));
-        }
         return result;
     }
 
     @Override
     public Either<Error, Integer> update(Customer customer) {
         Either<Error, Integer> result;
-
-        try (Connection myConnection = db.getConnection();
-
-             PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.UPDATE_CUSTOMER)) {
-            preparedStatement.setString(1, customer.getFirstName());
-            preparedStatement.setString(2, customer.getLastName());
-            preparedStatement.setString(3, customer.getEmail());
-            preparedStatement.setString(4, customer.getPhone());
-            preparedStatement.setDate(5, Date.valueOf(customer.getDob()));
-            preparedStatement.setInt(6, customer.getId());
-
-            int rowsUpdated = preparedStatement.executeUpdate();
+        JdbcTemplate jtm = new JdbcTemplate(db.getDataSource());
+        try {
+            int rowsUpdated = jtm.update(SQLQueries.UPDATE_CUSTOMER, customer.getFirstName(), customer.getLastName(), customer.getEmail(), customer.getPhone(), Date.valueOf(customer.getDob()), customer.getId());
 
             if (rowsUpdated > 0) {
                 result = Either.right(0);
             } else {
                 result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_UPDATING_CUSTOMER));
             }
-        } catch (SQLException e) {
-            Logger.getLogger(CustomerDaoImpl.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {
+            log.error(e.getMessage());
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_UPDATING_CUSTOMER));
         }
         return result;
@@ -213,5 +178,4 @@ public class CustomerDaoImpl implements CustomersDAO {
 
         return result;
     }
-
 }

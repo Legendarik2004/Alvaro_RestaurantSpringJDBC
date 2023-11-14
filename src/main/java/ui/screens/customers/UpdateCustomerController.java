@@ -3,9 +3,13 @@ package ui.screens.customers;
 import common.Constants;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import model.Credentials;
 import model.Customer;
 import services.CustomerService;
 import ui.screens.common.BaseScreenController;
@@ -89,7 +93,7 @@ public class UpdateCustomerController extends BaseScreenController {
         if (fnameField.getText().isEmpty() || lnameField.getText().isEmpty() || emailField.getText().isEmpty() || phoneField.getText().isEmpty() || dobField.getValue() == null) {
             getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
         } else {
-            customerService.update(new Customer(selectedCustomer.getId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue())).peek(success -> {
+            customerService.update(new Customer(selectedCustomer.getId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue(), new Credentials(0,null,null))).peek(success -> {
                         if (success == 0) {
                             setTable();
                             getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_UPDATED_SUCCESSFULLY);

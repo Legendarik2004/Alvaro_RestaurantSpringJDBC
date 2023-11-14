@@ -3,6 +3,9 @@ package common;
 public class Constants {
 
 
+    public static final String SEGURO_QUE_QUIERES_ELIMINAR = "¿Seguro que quieres eliminar?";
+    public static final String WELCOME = "Welcome ";
+
     private Constants() {}
 
     public static final int NUM_ERROR = 1;
@@ -89,7 +92,9 @@ public class Constants {
     public static final String DESCRIPTION = "description";
     public static final String PRICE = "price";
 
-
+    //Tables
+    public static final String TABLE_NUMBER_ID = "table_number_id";
+    public static final String NUMBER_OF_SEATS = "number_of_seats";
 
 
 }

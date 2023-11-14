@@ -10,7 +10,10 @@ import model.MenuItem;
 import model.OrderItem;
 import model.errors.Error;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,7 +29,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
     }
 
     @Override
-    public Either<Error, List<OrderItem>> getAllOrderItems(int id) {
+    public Either<Error, List<OrderItem>> getAll(int id) {
         Either<Error, List<OrderItem>> result;
 
         try (Connection myConnection = db.getConnection();
@@ -56,21 +59,13 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
                 String description = rs.getString(Constants.DESCRIPTION);
                 double price = rs.getDouble(Constants.PRICE);
 
-                orderItems.add(new OrderItem(orderItemId, orderId, menuItemId, quantity, new MenuItem(menuItemId, name, description, price)));
+                orderItems.add(new OrderItem(orderItemId, orderId, quantity, new MenuItem(menuItemId, name, description, price)));
             }
             result = Either.right(orderItems);
         } catch (SQLException e) {
             Logger.getLogger(OrderItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
             result = Either.left(new Error(Constants.NUM_ERROR, Constants.NO_ORDER_ITEMS_FOUND));
         }
-        return result;
-    }
-
-
-    @Override
-    public Either<Error, List<OrderItem>> get(int id) {
-        Either<Error, List<OrderItem>> result;
-        result = Either.right(getAllOrderItems(id).get().stream().filter(orderItem -> orderItem.getOrderId() == id).toList());
         return result;
     }
 
@@ -83,7 +78,7 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
              PreparedStatement preparedStatement = myConnection.prepareStatement(SQLQueries.ADD_ORDERITEM)) {
 
             preparedStatement.setInt(1, orderItem.getOrderId());
-            preparedStatement.setInt(2, orderItem.getMenuItemId());
+            preparedStatement.setInt(2, orderItem.getMenuItem().getMenuItemId());
             preparedStatement.setInt(3, orderItem.getQuantity());
 
             int rowsAdded = preparedStatement.executeUpdate();
@@ -102,18 +97,6 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
 
 
     @Override
-    public Either<Error, Integer> update(OrderItem orderItem) {
-        getAllOrderItems(orderItem.getOrderId());
-
-
-
-
-
-
-        return Either.right(0);
-    }
-
-    @Override
     public Either<Error, Integer> delete(OrderItem orderItem) {
         Either<Error, Integer> result;
 
@@ -128,11 +111,11 @@ public class OrderItemsDaoImpl implements OrderItemsDAO {
             if (rowsAdded > 0) {
                 result = Either.right(0);
             } else {
-                result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_ITEM));
+                result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_DELETING_ITEM));
             }
         } catch (SQLException e) {
             Logger.getLogger(OrderItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_ADDING_ITEM));
+            result = Either.left(new Error(Constants.NUM_ERROR, Constants.ERROR_DELETING_ITEM));
         }
         return result;
     }

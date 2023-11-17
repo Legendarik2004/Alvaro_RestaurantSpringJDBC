@@ -1,5 +1,6 @@
 package common;
 
+import common.constants.Constants;
 import jakarta.inject.Singleton;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -20,7 +21,7 @@ public class Configuration {
     public Configuration() {
         p = new Properties();
         try {
-            p.loadFromXML(Files.newInputStream(Paths.get("src/main/resources/mysql-properties.xml")));
+            p.loadFromXML(Files.newInputStream(Paths.get(Constants.PROPERTIES_XML_PATH)));
         } catch (IOException e) {
             e.printStackTrace();
         }

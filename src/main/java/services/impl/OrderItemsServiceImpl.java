@@ -22,9 +22,10 @@ public class OrderItemsServiceImpl implements OrderItemService {
         this.menuItemsDao = menuItemsDao;
     }
 
+
     @Override
-    public Either<Error, List<OrderItem>> getAll(int id) {
-        return dao.getAll(id);
+    public Either<Error, List<OrderItem>> get(int id) {
+        return dao.get(id);
     }
 
 

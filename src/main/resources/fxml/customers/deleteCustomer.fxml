@@ -28,6 +28,6 @@
             <TableColumn fx:id="tableOrderColumn" prefWidth="86.4000244140625" text="Table number" />
         </columns>
     </TableView>
-    <Button layoutX="742.0" layoutY="369.0" mnemonicParsing="false" onAction="#deleteCustomerOrder" text="Delete Customer" />
+    <Button layoutX="742.0" layoutY="369.0" mnemonicParsing="false" onAction="#deleteCustomer" text="Delete Customer" />
 
 </AnchorPane>

@@ -1,6 +1,8 @@
 package ui.screens.orders;
 
 
+import common.constants.Constants;
+import common.constants.ConstantsObjectAttributes;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -34,10 +36,15 @@ public class ShowOrderController extends BaseScreenController {
     public TableColumn<Integer, Order> customerOrderColumn;
     @FXML
     public TableColumn<Integer, Order> tableOrderColumn;
+
+    @FXML
+    public TableView<OrderItem> itemsTable;
+    @FXML
+    public TableColumn<OrderItem, String> nameItemColumn;
     @FXML
     public TableColumn<Integer, OrderItem> quantityItemColumn;
     @FXML
-    public TableColumn<OrderItem, String> nameItemColumn;
+    public TableColumn<OrderItem, String> priceItemColumn;
 
     @FXML
     public ComboBox<String> filterComboBox;
@@ -50,9 +57,7 @@ public class ShowOrderController extends BaseScreenController {
     @FXML
     public Label customerNameLabel;
     @FXML
-    public TableView<OrderItem> itemsTable;
-    @FXML
-    public Label priceLabel;
+    public Label totalPriceLabel;
 
     private Order selectedOrder;
     private Credentials actualCredentials;
@@ -67,12 +72,13 @@ public class ShowOrderController extends BaseScreenController {
 
 
     public void initialize() {
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-        dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-        tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("tableId"));
+        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.ORDER_ID));
+        dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.DATE));
+        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.CUSTOMER_ID));
+        tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.TABLE_ID));
         nameItemColumn.setCellValueFactory((cellData -> new SimpleStringProperty(cellData.getValue().getMenuItem().getName())));
-        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.QUANTITY));
+        priceItemColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMenuItem().getPrice() + Constants.EURO_SYMBOL));
         ordersTable.setOnMouseClicked(this::handleTableClick);
 
         customerOrderComboBox.getItems().addAll(customerService.getAll().get().stream().map(Customer::getId).toList());
@@ -96,9 +102,9 @@ public class ShowOrderController extends BaseScreenController {
     public void principalCargado() throws IOException {
         actualCredentials = getPrincipalController().getActualCredentials();
 
-        filterComboBox.getItems().addAll("Default", "Date");
-        if (actualCredentials.getId() < 0) {
-            filterComboBox.getItems().add("Customer");
+        filterComboBox.getItems().addAll(Constants.DEFAULT, Constants.DATE);
+        if (actualCredentials.getCustomerId() < 0) {
+            filterComboBox.getItems().add(Constants.CUSTOMER);
             customerNameLabel.setVisible(true);
         } else {
             customerNameLabel.setVisible(false);
@@ -109,12 +115,12 @@ public class ShowOrderController extends BaseScreenController {
     private void setOrderTable() {
         ordersTable.getItems().clear();
 
-        if (actualCredentials.getId() < 0) {
+        if (actualCredentials.getCustomerId() < 0) {
             orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
                     .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
 
         } else {
-            orderService.getOrderOfCustomer(actualCredentials.getId()).peek(orders -> ordersTable.getItems().addAll(orders))
+            orderService.getOrderOfCustomer(actualCredentials.getCustomerId()).peek(orders -> ordersTable.getItems().addAll(orders))
                     .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
         }
     }
@@ -123,7 +129,7 @@ public class ShowOrderController extends BaseScreenController {
     private void setOrderItemTable() {
         if (selectedOrder != null) {
 
-            orderItemService.getAll(selectedOrder.getOrderId())
+            orderItemService.get(selectedOrder.getOrderId())
                     .peek(orderItems -> itemsTable.getItems().setAll(orderItems))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
             customerService.get(selectedOrder.getCustomerId())
@@ -131,8 +137,11 @@ public class ShowOrderController extends BaseScreenController {
                     .peekLeft(noCustomer -> customerNameLabel.setText(noCustomer.getMessage()));
             selectedOrder.setOrderItems(itemsTable.getItems());
             orderService.getTotalPrice(selectedOrder)
-                    .peek(totalPrice -> priceLabel.setText((totalPrice + "€")))
-                    .peekLeft(noTotalPrice -> priceLabel.setText(noTotalPrice.getMessage()));
+                    .peek(totalPrice -> {
+                        totalPriceLabel.setText(totalPrice + Constants.EURO_SYMBOL);
+                        totalPriceLabel.setVisible(true);
+                    })
+                    .peekLeft(noTotalPrice -> totalPriceLabel.setText(noTotalPrice.getMessage()));
         } else {
             itemsTable.getItems().clear();
         }
@@ -142,7 +151,7 @@ public class ShowOrderController extends BaseScreenController {
     public void filter() {
         String selectedFilter = filterComboBox.getValue();
 
-        if ("Date".equals(selectedFilter)) {
+        if (Constants.DATE.equals(selectedFilter)) {
             dateField.setVisible(true);
             customerOrderComboBox.setVisible(false);
             filterButton.setVisible(true);
@@ -161,7 +170,7 @@ public class ShowOrderController extends BaseScreenController {
                 }
 
             });
-        } else if ("Customer".equals(selectedFilter)) {
+        } else if (Constants.CUSTOMER.equals(selectedFilter)) {
             dateField.setVisible(false);
             customerOrderComboBox.setVisible(true);
             filterButton.setVisible(true);
@@ -186,6 +195,7 @@ public class ShowOrderController extends BaseScreenController {
             itemsTable.getItems().clear();
             dateField.setVisible(false);
             filterButton.setVisible(false);
+            totalPriceLabel.setVisible(false);
             setOrderTable();
         }
     }

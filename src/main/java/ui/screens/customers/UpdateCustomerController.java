@@ -1,6 +1,8 @@
 package ui.screens.customers;
 
-import common.Constants;
+import common.constants.ConstantsErrorMessages;
+import common.constants.ConstantsObjectAttributes;
+import common.constants.ConstantsSuccessMessage;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -33,7 +35,7 @@ public class UpdateCustomerController extends BaseScreenController {
     public TableColumn<String, Customer> phoneCustomerColumn;
     @FXML
     public TableColumn<LocalDate, Customer> dobCustomerColumn;
-    private Customer selectedCustomer;
+
     @FXML
     public TextField idField;
     @FXML
@@ -47,18 +49,20 @@ public class UpdateCustomerController extends BaseScreenController {
     @FXML
     public DatePicker dobField;
 
+    private Customer selectedCustomer;
+
     @Inject
     public UpdateCustomerController(CustomerService customerService) {
         this.customerService = customerService;
     }
 
     public void initialize() {
-        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        emailCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        phoneCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        dobCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("dob"));
+        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.ID));
+        firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.FIRST_NAME));
+        lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.LAST_NAME));
+        emailCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.EMAIL));
+        phoneCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.PHONE));
+        dobCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.DOB));
         customersTable.setOnMouseClicked(this::handleTableClick);
         idField.setDisable(true);
     }
@@ -91,16 +95,15 @@ public class UpdateCustomerController extends BaseScreenController {
 
     public void updateCustomer() {
         if (fnameField.getText().isEmpty() || lnameField.getText().isEmpty() || emailField.getText().isEmpty() || phoneField.getText().isEmpty() || dobField.getValue() == null) {
-            getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
+            getPrincipalController().showErrorAlert(ConstantsErrorMessages.EMPTY_FIELD);
         } else {
             customerService.update(new Customer(selectedCustomer.getId(), fnameField.getText(), lnameField.getText(), emailField.getText(), phoneField.getText(), dobField.getValue(), new Credentials(0,null,null))).peek(success -> {
                         if (success == 0) {
                             setTable();
-                            getPrincipalController().showConfirmationAlert(Constants.CUSTOMER_UPDATED_SUCCESSFULLY);
-
+                            getPrincipalController().showConfirmationAlert(ConstantsSuccessMessage.CUSTOMER_UPDATED_SUCCESSFULLY);
                         }
                     })
-                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_UPDATING_CUSTOMER));
+                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(customerError.getMessage()));
         }
     }
 }

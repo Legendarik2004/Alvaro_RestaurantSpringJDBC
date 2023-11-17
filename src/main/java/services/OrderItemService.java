@@ -8,7 +8,7 @@ import model.errors.Error;
 import java.util.List;
 
 public interface OrderItemService {
-    Either<Error, List<OrderItem>> getAll(int id);
+    Either<Error, List<OrderItem>> get(int id);
 
     Either<Error, Integer> save(OrderItem orderItem);
 

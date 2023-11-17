@@ -16,5 +16,5 @@ public interface CustomersDAO {
 
     Either<Error, Integer> update(Customer c);
 
-    Either<Error, Integer> delete(Customer c);
+    Either<Error, Integer> delete(Customer c, boolean delete);
 }

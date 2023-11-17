@@ -1,8 +1,10 @@
 package services.impl;
 
-import dao.OrderDAO;
+import common.constants.ConstantsErrorMessages;
+import dao.OrdersDAO;
 import io.vavr.control.Either;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import model.Order;
 import model.errors.Error;
 import services.OrderService;
@@ -11,10 +13,10 @@ import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderDAO dao;
+    private final OrdersDAO dao;
 
     @Inject
-    public OrderServiceImpl(OrderDAO dao) {
+    public OrderServiceImpl(@Named("ordersDAO") OrdersDAO dao) {
         this.dao = dao;
     }
 
@@ -22,20 +24,36 @@ public class OrderServiceImpl implements OrderService {
     public Either<Error, List<Order>> getAll() {
         return dao.getAll();
     }
+    @Override
+    public Either<Error, Order> get(int id) {
+        return dao.get(id);
+    }
 
     @Override
     public Either<Error, List<Order>> getOrderOfCustomer(int id) {
-        return dao.getOrderOfCustomer(id);
+        return Either.right(getAll().get().stream().filter(order -> order.getCustomerId() == id).toList());
     }
 
     @Override
     public Either<Error, Double> getTotalPrice(Order order) {
-        return dao.getTotalPrice(order);
+        Either<Error, Double> result;
+
+        if (order.getOrderItems().isEmpty()) {
+            result = Either.left(new Error(ConstantsErrorMessages.NUM_ERROR, ConstantsErrorMessages.NO_ORDER_ITEMS_FOUND));
+        } else {
+            double totalPrice = order.getOrderItems().stream()
+                    .mapToDouble(orderItem -> orderItem.getMenuItem().getPrice() * orderItem.getQuantity())
+                    .sum();
+
+            double roundedTotalPrice = Math.round(totalPrice * 100.0) / 100.0;
+            result = Either.right(roundedTotalPrice);
+        }
+        return result;
     }
 
     @Override
-    public Either<Error, Integer> save(Order o) {
-        return dao.save(o);
+    public Either<Error, Integer> add(Order o) {
+        return dao.add(o);
     }
 
     @Override
@@ -46,10 +64,5 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Either<Error, Integer> delete(Order o) {
         return dao.delete(o);
-    }
-
-    @Override
-    public int getAddedOrderId() {
-        return dao.getAddedOrderId();
     }
 }

@@ -1,5 +1,6 @@
 package ui.screens.customers;
 
+import common.constants.ConstantsObjectAttributes;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -35,12 +36,12 @@ public class ShowCustomersController extends BaseScreenController {
     }
 
     public void initialize() {
-        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        emailCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
-        phoneCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
-        dobCustomerColumn.setCellValueFactory(new PropertyValueFactory<>("dob"));
+        idCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.ID));
+        firstnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.FIRST_NAME));
+        lastnameCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.LAST_NAME));
+        emailCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.EMAIL));
+        phoneCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.PHONE));
+        dobCustomerColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.DOB));
     }
 
     @Override

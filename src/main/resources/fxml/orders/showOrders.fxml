@@ -32,13 +32,14 @@
             <Font size="16.0" />
         </font>
     </Label>
-    <TableView fx:id="itemsTable" layoutX="573.0" layoutY="101.0" prefHeight="257.0" prefWidth="210.0">
+    <TableView fx:id="itemsTable" layoutX="573.0" layoutY="101.0" prefHeight="257.0" prefWidth="310.0">
         <columns>
             <TableColumn fx:id="nameItemColumn" prefWidth="145" text="Name" />
             <TableColumn fx:id="quantityItemColumn" prefWidth="65" style="-fx-alignment: center" text="Quantity" />
+            <TableColumn fx:id="priceItemColumn" prefWidth="100" style="-fx-alignment: center" text="Price" />
         </columns>
     </TableView>
-    <Label fx:id="priceLabel" alignment="CENTER" layoutX="598.0" layoutY="379.0" prefHeight="26.0" prefWidth="160.0" text="Total amount">
+    <Label fx:id="totalPriceLabel" alignment="CENTER" layoutX="598.0" layoutY="379.0" prefHeight="26.0" prefWidth="160.0" text="Total amount">
         <font>
             <Font size="16.0" />
         </font>

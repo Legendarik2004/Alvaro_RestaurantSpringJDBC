@@ -1,7 +1,9 @@
 package dao.impl;
 
 
-import common.Constants;
+import common.constants.Constants;
+import common.constants.ConstantsErrorMessages;
+import common.constants.ConstantsSQLTableAttributes;
 import common.SQLQueries;
 import dao.TableDAO;
 import io.vavr.control.Either;
@@ -39,7 +41,7 @@ public class TableDaoImpl implements TableDAO {
             result = Either.right(readRS(rs).get());
         } catch (SQLException e) {
             Logger.getLogger(TableDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, "No tables found"));
+            result = Either.left(new Error(ConstantsErrorMessages.NUM_ERROR, Constants.NO_TABLES));
         }
         return result;
 
@@ -51,15 +53,15 @@ public class TableDaoImpl implements TableDAO {
         try {
             List<Table> tables = new ArrayList<>();
             while (rs.next()) {
-                int tableId = rs.getInt(Constants.TABLE_NUMBER_ID);
-                int numberOfSeats = rs.getInt(Constants.NUMBER_OF_SEATS);
+                int tableId = rs.getInt(ConstantsSQLTableAttributes.TABLE_NUMBER_ID);
+                int numberOfSeats = rs.getInt(ConstantsSQLTableAttributes.NUMBER_OF_SEATS);
                 Table table = new Table(tableId,numberOfSeats);
                 tables.add(table);
             }
             result = Either.right(tables);
         } catch (SQLException e) {
             Logger.getLogger(MenuItemsDaoImpl.class.getName()).log(Level.SEVERE, null, e);
-            result = Either.left(new Error(Constants.NUM_ERROR, "No tables found"));
+            result = Either.left(new Error(ConstantsErrorMessages.NUM_ERROR, Constants.NO_TABLES));
         }
         return result;
     }

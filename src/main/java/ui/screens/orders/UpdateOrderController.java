@@ -1,18 +1,20 @@
 package ui.screens.orders;
 
-import common.Constants;
+import common.constants.Constants;
+import common.constants.ConstantsErrorMessages;
+import common.constants.ConstantsObjectAttributes;
+import common.constants.ConstantsSuccessMessage;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import model.Credentials;
 import model.MenuItem;
-import model.Order;
-import model.OrderItem;
+import model.*;
 import services.OrderItemService;
 import services.OrderService;
+import services.TablesService;
 import ui.screens.common.BaseScreenController;
 
 import java.io.IOException;
@@ -22,9 +24,9 @@ import java.util.List;
 
 public class UpdateOrderController extends BaseScreenController {
 
-    public static final String MENU_ITEMS = "Menu items";
     private final OrderService orderService;
     private final OrderItemService orderItemService;
+    private final TablesService tablesService;
     @FXML
     public TableView<Order> ordersTable;
     @FXML
@@ -42,11 +44,13 @@ public class UpdateOrderController extends BaseScreenController {
     @FXML
     public TableColumn<Integer, OrderItem> quantityItemColumn;
     @FXML
+    public TextField orderIdField;
+    @FXML
+    public TextField customerField;
+    @FXML
     public DatePicker dateField;
     @FXML
-    public TextField tableOrderField;
-    @FXML
-    public TextField customerOrderField;
+    public ComboBox<Integer> tableComboBox;
     @FXML
     public TextField quantityItemField;
     @FXML
@@ -56,23 +60,29 @@ public class UpdateOrderController extends BaseScreenController {
     private Credentials actualCredentials;
 
     @Inject
-    public UpdateOrderController(OrderService orderService, OrderItemService orderItemService) {
+    public UpdateOrderController(OrderService orderService, OrderItemService orderItemService, TablesService tablesService) {
         this.orderService = orderService;
         this.orderItemService = orderItemService;
+        this.tablesService = tablesService;
     }
 
     public void initialize() {
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-        dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-        tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("tableId"));
+        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.ORDER_ID));
+        dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.DATE));
+        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.CUSTOMER_ID));
+        tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.TABLE_ID));
 
         nameItemColumn.setCellValueFactory((cellData -> new SimpleStringProperty(cellData.getValue().getMenuItem().getName())));
-        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.QUANTITY));
+
         ordersTable.setOnMouseClicked(this::handleOrderTableClick);
         itemsTable.setOnMouseClicked(this::handleItemTableClick);
+
         itemsComboBox.getItems().addAll(orderItemService.getAllMenuItems().get().stream().map(MenuItem::getName).toList());
-        customerOrderField.setDisable(true);
+        tableComboBox.getItems().addAll(tablesService.getAll().get().stream().map(Table::getTableId).toList());
+
+        orderIdField.setDisable(true);
+        customerField.setDisable(true);
         dateField.setDisable(true);
     }
 
@@ -82,8 +92,9 @@ public class UpdateOrderController extends BaseScreenController {
             this.selectedOrder = newSelectedOrder;
 
             if (newSelectedOrder != null) {
-                tableOrderField.setText(String.valueOf(newSelectedOrder.getTableId()));
-                customerOrderField.setText(String.valueOf(newSelectedOrder.getCustomerId()));
+                tableComboBox.setValue(newSelectedOrder.getTableId());
+                orderIdField.setText(String.valueOf(newSelectedOrder.getOrderId()));
+                customerField.setText(String.valueOf(newSelectedOrder.getCustomerId()));
                 dateField.setValue(newSelectedOrder.getDate().toLocalDateTime().toLocalDate());
             }
         }
@@ -109,12 +120,12 @@ public class UpdateOrderController extends BaseScreenController {
 
     private void setTables() {
         ordersTable.getItems().clear();
-        if (actualCredentials.getId() < 0) {
+        if (actualCredentials.getCustomerId() < 0) {
             orderService.getAll().peek(orders -> ordersTable.getItems().addAll(orders))
                     .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
 
         } else {
-            orderService.getOrderOfCustomer(actualCredentials.getId()).peek(orders -> ordersTable.getItems().addAll(orders))
+            orderService.getOrderOfCustomer(actualCredentials.getCustomerId()).peek(orders -> ordersTable.getItems().addAll(orders))
                     .peekLeft(orderError -> getPrincipalController().showErrorAlert(orderError.getMessage()));
         }
         itemsTable.getItems().clear();
@@ -123,7 +134,7 @@ public class UpdateOrderController extends BaseScreenController {
 
     private void setOrderItemTable() {
         if (selectedOrder != null) {
-            orderItemService.getAll(selectedOrder.getOrderId())
+            orderItemService.get(selectedOrder.getOrderId())
                     .peek(orderItems -> itemsTable.getItems().setAll(orderItems))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
             itemsComboBox.setDisable(false);
@@ -133,14 +144,14 @@ public class UpdateOrderController extends BaseScreenController {
     }
 
     public void updateOrder() {
-        if (tableOrderField.getText().isEmpty()) {
-            getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
+        if (tableComboBox.getValue() == null) {
+            getPrincipalController().showErrorAlert(ConstantsErrorMessages.EMPTY_FIELD);
         } else {
             List<OrderItem> orderItems = itemsTable.getItems().stream().toList();
-            orderService.update(new Order(selectedOrder.getOrderId(), Timestamp.from(Instant.now()), 0, Integer.parseInt(tableOrderField.getText()),orderItems)).peek(success -> {
+            orderService.update(new Order(selectedOrder.getOrderId(), Timestamp.from(Instant.now()), 0, tableComboBox.getValue(), orderItems)).peek(success -> {
                         if (success == 0) {
 
-                            orderItemService.getAll(selectedOrder.getOrderId())
+                            orderItemService.get(selectedOrder.getOrderId())
                                     .peek(orderItemsList -> orderItemsList.forEach(orderItemService::delete))
                                     .peekLeft(noItems -> itemsTable.getItems().clear());
 
@@ -149,21 +160,21 @@ public class UpdateOrderController extends BaseScreenController {
                                 orderItemService.save(orderItem);
                             }
                             setTables();
-                            getPrincipalController().showConfirmationAlert(Constants.ORDER_UPDATED_SUCCESSFULLY);
+                            getPrincipalController().showConfirmationAlert(ConstantsSuccessMessage.ORDER_UPDATED_SUCCESSFULLY);
 
                         }
                     })
-                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_UPDATING_ORDER));
+                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(customerError.getMessage()));
         }
     }
 
     @FXML
     public void addItem() {
         if (selectedOrder == null) {
-            getPrincipalController().showErrorAlert(Constants.SELECT_ORDER_FIRST);
+            getPrincipalController().showErrorAlert(ConstantsErrorMessages.SELECT_ORDER_FIRST);
         } else {
-            if (quantityItemField.getText().isEmpty() || itemsComboBox.getValue().equals(MENU_ITEMS)) {
-                getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
+            if (quantityItemField.getText().isEmpty() || itemsComboBox.getValue().equals(Constants.MENU_ITEMS)) {
+                getPrincipalController().showErrorAlert(ConstantsErrorMessages.EMPTY_FIELD);
             } else {
                 MenuItem add = orderItemService.getAllMenuItems().get().stream()
                         .filter(menuItem -> menuItem.getName().equals(itemsComboBox.getValue()))
@@ -171,9 +182,9 @@ public class UpdateOrderController extends BaseScreenController {
                 if (add != null) {
                     itemsTable.getItems().add(new OrderItem(0, selectedOrder.getOrderId(), Integer.parseInt(quantityItemField.getText()), add));
                     quantityItemField.clear();
-                    getPrincipalController().showConfirmationAlert(Constants.ITEM_ADDED_SUCCESSFULLY);
+                    getPrincipalController().showConfirmationAlert(ConstantsSuccessMessage.ITEM_ADDED_SUCCESSFULLY);
                 } else {
-                    getPrincipalController().showErrorAlert(Constants.ERROR_ADDING_ITEM);
+                    getPrincipalController().showErrorAlert(ConstantsErrorMessages.ERROR_ADDING_ITEM);
                 }
             }
         }
@@ -182,10 +193,10 @@ public class UpdateOrderController extends BaseScreenController {
     @FXML
     public void removeItem() {
         if (itemsTable.getItems().remove(selectedOrderItem)) {
-            getPrincipalController().showConfirmationAlert(Constants.ITEM_REMOVED_SUCCESSFULLY);
+            getPrincipalController().showConfirmationAlert(ConstantsSuccessMessage.ITEM_REMOVED_SUCCESSFULLY);
             selectedOrderItem = null;
         } else {
-            getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_ITEM);
+            getPrincipalController().showErrorAlert(ConstantsErrorMessages.ERROR_DELETING_ITEM);
         }
     }
 }

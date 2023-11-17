@@ -2,8 +2,8 @@ package common;
 
 public class SQLQueries {
 
-
     private SQLQueries() {
+        //NOP
     }
 
     //CREDENTIALS
@@ -14,20 +14,25 @@ public class SQLQueries {
 
     //CUSTOMER
     public static final String GETALL_CUSTOMERS = "SELECT * FROM customers";
+    public static final String GET_CUSTOMER = "SELECT * FROM customers where id = ?";
     public static final String ADD_CUSTOMER = "INSERT INTO customers (id, first_name, last_name, email, phone, date_of_birth) VALUES (?, ?, ?, ?, ?, ?)";
     public static final String UPDATE_CUSTOMER = "UPDATE customers SET first_name = ?, last_name = ?, email = ?, phone = ?, date_of_birth = ? WHERE id = ?";
     public static final String DELETE_CUSTOMER = "DELETE FROM customers WHERE id = ?";
 
     //ORDERS
     public static final String GETALL_ORDERS = "SELECT * FROM orders";
+    public static final String GET_ORDER = "SELECT * FROM orders where order_id = ?";
+    public static final String GET_ORDER_OF_CUSTOMER = "SELECT * FROM orders where customer_id = ?";
     public static final String ADD_ORDER = "INSERT INTO orders (order_date, customer_id, table_id) VALUES ( ?, ?, ?)";
     public static final String UPDATE_ORDER = "UPDATE orders SET table_id = ? WHERE order_id = ?";
     public static final String DELETE_ORDER = "DELETE FROM orders WHERE order_id = ?";
+    public static final String DELETE_CUSTOMER_ORDERS = "DELETE FROM orders WHERE customer_id = ?";
 
     //ORDERITEMS
     public static final String GETALL_ORDERITEMS = "SELECT oi.order_item_id, oi.order_id, oi.menu_item_id, oi.quantity, mi.name, mi.description, mi.price FROM order_items oi INNER JOIN menu_items mi ON oi.menu_item_id = mi.menu_item_id WHERE oi.order_id = ?";
     public static final String ADD_ORDERITEM = "INSERT INTO order_items (order_id, menu_item_id, quantity) VALUES ( ?, ?, ?)";
     public static final String DELETE_ORDERITEM = "DELETE FROM order_items WHERE order_item_id = ?";
+    public static final String DELETE_CUSTOMER_ORDERITEMS = "DELETE FROM order_items WHERE order_id IN (SELECT order_id FROM orders WHERE customer_id = ?)";
 
     //MENUITEMS
     public static final String GETALL_MENUITEMS = "SELECT * FROM menu_items";

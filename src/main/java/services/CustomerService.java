@@ -15,5 +15,5 @@ public interface CustomerService {
 
     Either<Error, Integer> update(Customer c);
 
-    Either<Error, Integer> delete(Customer c);
+    Either<Error, Integer> delete(Customer c, boolean delete);
 }

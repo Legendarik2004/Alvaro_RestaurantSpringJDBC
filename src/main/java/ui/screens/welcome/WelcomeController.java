@@ -1,6 +1,6 @@
 package ui.screens.welcome;
 
-import common.Constants;
+import common.constants.Constants;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import ui.screens.common.BaseScreenController;

@@ -10,7 +10,7 @@
             <Font size="22.0" />
         </font>
     </Label>
-    <TableView fx:id="ordersTable" layoutX="20.0" layoutY="58.0" prefHeight="331.0" prefWidth="390.0">
+    <TableView fx:id="ordersTable" layoutX="20.0" layoutY="60.0" prefHeight="331.0" prefWidth="390.0">
         <columns>
             <TableColumn fx:id="idOrderColumn" prefWidth="50" text="Id" />
             <TableColumn fx:id="dateOrderColumn" prefWidth="150" text="Date" />
@@ -18,25 +18,26 @@
             <TableColumn fx:id="tableOrderColumn" prefWidth="95" text="Table number" />
         </columns>
     </TableView>
-    <Label layoutX="646.0" layoutY="198.0" text="Order Items">
+    <Label layoutX="706.0" layoutY="60.0" text="Order Items">
         <font>
             <Font size="16.0" />
         </font>
     </Label>
-    <TableView fx:id="itemsTable" layoutX="582.0" layoutY="224.0" prefHeight="200.0" prefWidth="210.0">
+    <TableView fx:id="itemsTable" layoutX="643.0" layoutY="96.0" prefHeight="200.0" prefWidth="210.0">
         <columns>
 
             <TableColumn fx:id="nameItemColumn" prefWidth="145" text="Name" />
             <TableColumn fx:id="quantityItemColumn" prefWidth="65" text="Quantity" />
         </columns>
     </TableView>
-    <Button layoutX="643.0" layoutY="438.0" mnemonicParsing="false" onAction="#updateOrder" text="Update Order" />
-    <DatePicker fx:id="dateField" layoutX="473.0" layoutY="58.0" prefHeight="26.0" prefWidth="150.0" promptText="Date" />
-    <TextField fx:id="tableOrderField" layoutX="473.0" layoutY="93.0" promptText="Table number" />
-    <TextField fx:id="customerOrderField" layoutX="473.0" layoutY="131.0" promptText="Customer" />
-    <ComboBox fx:id="itemsComboBox" layoutX="688.0" layoutY="58.0" prefHeight="26.0" prefWidth="150.0" promptText="Menu items" />
-    <TextField fx:id="quantityItemField" layoutX="688.0" layoutY="93.0" promptText="Quantity" />
-    <Button layoutX="799.0" layoutY="131.0" mnemonicParsing="false" onAction="#addItem" text="Add" />
-    <Button layoutX="688.0" layoutY="131.0" mnemonicParsing="false" onAction="#removeItem" text="Remove" />
+    <Button layoutX="703.0" layoutY="323.0" mnemonicParsing="false" onAction="#updateOrder" text="Update Order" />
+    <TextField fx:id="orderIdField" layoutX="470.0" layoutY="60.0" prefHeight="26.0" prefWidth="30.0" promptText="Id" />
+    <TextField fx:id="customerField" layoutX="520.0" layoutY="60.0" prefHeight="26.0" prefWidth="70.0" promptText="Customer" />
+    <DatePicker fx:id="dateField" layoutX="470.0" layoutY="100.0" prefHeight="26.0" prefWidth="120.0" promptText="Date" />
+    <ComboBox fx:id="tableComboBox" layoutX="470.0" layoutY="140.0" prefHeight="26.0" prefWidth="120.0" promptText="Table number" />
+    <ComboBox fx:id="itemsComboBox" layoutX="470.0" layoutY="210.0" prefHeight="26.0" prefWidth="145.0" promptText="Menu items" />
+    <TextField fx:id="quantityItemField" layoutX="470.0" layoutY="250.0" prefHeight="26.0" prefWidth="145.0" promptText="Quantity" />
+    <Button layoutX="470.0" layoutY="290.0" mnemonicParsing="false" onAction="#addItem" prefWidth="60.0" text="Add" />
+    <Button layoutX="555.0" layoutY="290.0" mnemonicParsing="false" onAction="#removeItem" prefWidth="60.0" text="Remove" />
 
 </AnchorPane>

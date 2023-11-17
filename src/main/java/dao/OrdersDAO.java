@@ -6,18 +6,17 @@ import model.errors.Error;
 
 import java.util.List;
 
-public interface OrderDAO {
+public interface OrdersDAO {
     Either<Error, List<Order>> getAll();
+    Either<Error, List<Order>> getAll(int id);
 
-    Either<Error, List<Order>> getOrderOfCustomer(int id);
+    Either<Error, Order> get(int id);
 
-    Either<Error, Double> getTotalPrice(Order order);
-
-    Either<Error, Integer> save(Order order);
+    Either<Error, Integer> add(Order order);
 
     Either<Error, Integer> update(Order order);
 
     Either<Error, Integer> delete(Order order);
 
-    int getAddedOrderId();
+    Either<Error, Integer> save(List<Order> orders);
 }

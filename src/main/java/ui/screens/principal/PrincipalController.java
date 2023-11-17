@@ -84,7 +84,7 @@ public class PrincipalController {
         menuPrincipal.setVisible(true);
         cargarPantalla(Screens.WELCOME);
 
-        if (actualCredentials.getId() < 0) {
+        if (actualCredentials.getCustomerId() < 0) {
             menuCustomers.setVisible(true);
             addOrder.setVisible(false);
             deleteOrder.setVisible(true);

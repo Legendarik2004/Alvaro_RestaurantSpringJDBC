@@ -1,6 +1,8 @@
 package ui.screens.orders;
 
-import common.Constants;
+import common.constants.ConstantsErrorMessages;
+import common.constants.ConstantsObjectAttributes;
+import common.constants.ConstantsSuccessMessage;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -50,14 +52,14 @@ public class DeleteOrderController extends BaseScreenController {
     }
 
     public void initialize() {
-        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>("orderId"));
-        dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
-        tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>("tableId"));
+        idOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.ORDER_ID));
+        dateOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.DATE));
+        customerOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.CUSTOMER_ID));
+        tableOrderColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.TABLE_ID));
 
-        idItemColumn.setCellValueFactory(new PropertyValueFactory<>("orderItemId"));
+        idItemColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.ORDER_ITEM_ID));
         nameItemColumn.setCellValueFactory((cellData -> new SimpleStringProperty(cellData.getValue().getMenuItem().getName())));
-        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.QUANTITY));
         ordersTable.setOnMouseClicked(this::handleTableClick);
     }
 
@@ -85,7 +87,7 @@ public class DeleteOrderController extends BaseScreenController {
 
     private void setOrderItemTable() {
         if (selectedOrder != null) {
-            orderItemService.getAll(selectedOrder.getOrderId())
+            orderItemService.get(selectedOrder.getOrderId())
                     .peek(orderItems -> itemsTable.getItems().setAll(orderItems))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
         } else {
@@ -96,10 +98,10 @@ public class DeleteOrderController extends BaseScreenController {
     @FXML
     public void deleteOrder() {
         if (selectedOrder == null) {
-            getPrincipalController().showErrorAlert(Constants.SELECT_ORDER_FIRST);
+            getPrincipalController().showErrorAlert(ConstantsErrorMessages.SELECT_ORDER_FIRST);
         } else {
 
-            orderItemService.getAll(selectedOrder.getOrderId())
+            orderItemService.get(selectedOrder.getOrderId())
                     .peek(orderItemsList -> orderItemsList.forEach(orderItemService::delete))
                     .peekLeft(noItems -> itemsTable.getItems().clear());
 
@@ -107,10 +109,10 @@ public class DeleteOrderController extends BaseScreenController {
                         if (success == 0) {
                             setOrderItemTable();
                             setOrderTable();
-                            getPrincipalController().showConfirmationAlert(Constants.ORDER_DELETED_SUCCESSFULLY);
+                            getPrincipalController().showConfirmationAlert(ConstantsSuccessMessage.ORDER_DELETED_SUCCESSFULLY);
                         }
                     })
-                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_ORDER));
+                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(customerError.getMessage()));
         }
     }
 }

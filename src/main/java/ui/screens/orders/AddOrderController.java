@@ -1,6 +1,9 @@
 package ui.screens.orders;
 
-import common.Constants;
+import common.constants.Constants;
+import common.constants.ConstantsErrorMessages;
+import common.constants.ConstantsObjectAttributes;
+import common.constants.ConstantsSuccessMessage;
 import jakarta.inject.Inject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
@@ -38,6 +41,8 @@ public class AddOrderController extends BaseScreenController {
     public TextField quantityItemField;
     @FXML
     public ComboBox<Integer> tableComboBox;
+    @FXML
+    public TextField nameLabel;
     private OrderItem selectedOrderItem;
     private Credentials actualCredentials;
     private TablesService tablesService;
@@ -51,7 +56,8 @@ public class AddOrderController extends BaseScreenController {
 
     public void initialize() {
         menuItemColumn.setCellValueFactory((cellData -> new SimpleStringProperty(cellData.getValue().getMenuItem().getName())));
-        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityItemColumn.setCellValueFactory(new PropertyValueFactory<>(ConstantsObjectAttributes.QUANTITY));
+
         itemsTable.setOnMouseClicked(this::handleTableClick);
 
         tableComboBox.getItems().addAll(tablesService.getAll().get().stream().map(Table::getTableId).toList());
@@ -70,6 +76,8 @@ public class AddOrderController extends BaseScreenController {
     @Override
     public void principalCargado() throws IOException {
         actualCredentials = getPrincipalController().getActualCredentials();
+        nameLabel.setText(actualCredentials.getUsername());
+        nameLabel.setDisable(true);
         setTable();
     }
 
@@ -80,24 +88,24 @@ public class AddOrderController extends BaseScreenController {
     @FXML
     public void addOrder() {
         if (tableComboBox.getValue() == null || itemsTable.getItems().isEmpty()) {
-            getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
+            getPrincipalController().showErrorAlert(ConstantsErrorMessages.EMPTY_FIELD);
         } else {
             List<OrderItem> orderItemList = itemsTable.getItems().stream().toList();
-            orderService.save(new Order(0, Timestamp.from(Instant.now()), actualCredentials.getId(), tableComboBox.getValue(), orderItemList)).peek(success -> {
+            orderService.add(new Order(0, Timestamp.from(Instant.now()), actualCredentials.getCustomerId(), tableComboBox.getValue(), orderItemList)).peek(success -> {
 
                         if (success == 0) {
                             setTable();
-                            getPrincipalController().showConfirmationAlert(Constants.ORDER_ADDED_SUCCESSFULLY);
+                            getPrincipalController().showConfirmationAlert(ConstantsSuccessMessage.ORDER_ADDED_SUCCESSFULLY);
                         }
                     })
-                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(Constants.ERROR_ADDING_ORDER));
+                    .peekLeft(customerError -> getPrincipalController().showErrorAlert(customerError.getMessage()));
         }
     }
 
     @FXML
     public void addItem() {
-        if (quantityItemField.getText().isEmpty() || itemsComboBox.getValue().equals("Menu items")) {
-            getPrincipalController().showErrorAlert(Constants.EMPTY_FIELD);
+        if (quantityItemField.getText().isEmpty() || itemsComboBox.getValue().equals(Constants.MENU_ITEMS)) {
+            getPrincipalController().showErrorAlert(ConstantsErrorMessages.EMPTY_FIELD);
         } else {
             MenuItem add = orderItemService.getAllMenuItems().get().stream()
                     .filter(menuItem -> menuItem.getName().equals(itemsComboBox.getValue()))
@@ -105,9 +113,9 @@ public class AddOrderController extends BaseScreenController {
             if (add != null) {
                 itemsTable.getItems().add(new OrderItem(0, 0, Integer.parseInt(quantityItemField.getText()), add));
                 quantityItemField.clear();
-                getPrincipalController().showConfirmationAlert(Constants.ITEM_ADDED_SUCCESSFULLY);
+                getPrincipalController().showConfirmationAlert(ConstantsSuccessMessage.ITEM_ADDED_SUCCESSFULLY);
             } else {
-                getPrincipalController().showErrorAlert(Constants.ERROR_ADDING_ITEM);
+                getPrincipalController().showErrorAlert(ConstantsErrorMessages.ERROR_ADDING_ITEM);
             }
         }
     }
@@ -115,10 +123,10 @@ public class AddOrderController extends BaseScreenController {
     @FXML
     public void removeItem() {
         if (itemsTable.getItems().remove(selectedOrderItem)) {
-            getPrincipalController().showConfirmationAlert(Constants.ITEM_REMOVED_SUCCESSFULLY);
+            getPrincipalController().showConfirmationAlert(ConstantsSuccessMessage.ITEM_REMOVED_SUCCESSFULLY);
             selectedOrderItem = null;
         } else {
-            getPrincipalController().showErrorAlert(Constants.ERROR_DELETING_ITEM);
+            getPrincipalController().showErrorAlert(ConstantsErrorMessages.ERROR_DELETING_ITEM);
         }
     }
 }

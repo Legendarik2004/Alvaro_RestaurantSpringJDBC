@@ -1,6 +1,6 @@
 package ui.screens.login;
 
-import common.Constants;
+import common.constants.ConstantsErrorMessages;
 import jakarta.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -31,10 +31,10 @@ public class LoginController extends BaseScreenController {
                     if (Boolean.TRUE.equals(success)) {
                         getPrincipalController().onLoginDone(loginService.get());
                     } else {
-                        getPrincipalController().showErrorAlert(Constants.INCORRECT_USER_OR_PASSWORD);
+                        getPrincipalController().showErrorAlert(ConstantsErrorMessages.INCORRECT_USER_OR_PASSWORD);
                     }
                 })
-                .peekLeft(loginError -> getPrincipalController().showErrorAlert(Constants.INCORRECT_USER_OR_PASSWORD));
+                .peekLeft(loginError -> getPrincipalController().showErrorAlert(ConstantsErrorMessages.INCORRECT_USER_OR_PASSWORD));
 
     }
 }
